@@ -1,13 +1,17 @@
-import { useGetUser } from "./api/api.ts";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Login } from "./pages/Login/Page.tsx";
 import { Home } from "./pages/Home/Page.tsx";
 import { Routes } from "./utils/routesConfig.ts";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   {
     path: Routes.HOME,
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
     path: Routes.LOGIN,
@@ -16,9 +20,5 @@ const router = createBrowserRouter([
 ]);
 
 export const App = () => {
-  const { data: userAuth } = useGetUser();
-
-  console.log(userAuth);
-
   return <RouterProvider router={router} />;
 };
