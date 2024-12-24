@@ -1,4 +1,6 @@
 import { Button, Checkbox, Form, FormProps, Input } from "antd";
+import { Link } from "react-router-dom";
+import { Routes } from "../utils/routesConfig.ts";
 
 type FieldType = {
   username?: string;
@@ -50,11 +52,16 @@ export const FormLogin = () => {
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
 
-      <Form.Item label={null}>
-        <Button type="primary" htmlType="submit">
-          Submit
+      <div className="flex items-center w-full">
+        <Form.Item label={null} className="w-full mb-0">
+          <Button type="primary" htmlType="submit">
+            Login
+          </Button>
+        </Form.Item>
+        <Button className="w-full">
+          <Link to={Routes.REGISTRATION}>Registration</Link>
         </Button>
-      </Form.Item>
+      </div>
     </Form>
   );
 };
