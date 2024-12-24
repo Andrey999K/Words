@@ -17,11 +17,15 @@ const keys = {
   checkAuthUser: "checkAuthUser",
 };
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.withCredentials = true;
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
 export const checkAuthUser = async (): Promise<unknown> => {
   try {
-    const response = await axios.get("/user");
+    const response = await axiosInstance.get("/user");
     if (response.status === 200) {
       return response.data.result.data;
     }
