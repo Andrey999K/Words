@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { Response } from "../types";
+import { ResponseType } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +35,7 @@ const customFetch = async (url: string, method?: "GET" | "POST", body?: object) 
       response = await axiosInstance.post(url, body);
     }
     if (response.status === 200) {
-      return response.data.result.data;
+      return response.data.result;
     }
     if (isDev()) {
       console.log("response", response);
@@ -61,7 +61,7 @@ export const useGetUser = (): UseQueryResult<{ result: string }, Error> => {
 };
 
 // регистрация пользователя
-const registerUser = async (body: object): Promise<Response> => {
+const registerUser = async (body: object): Promise<ResponseType> => {
   return customFetch("/user/register", "POST", body);
 };
 
@@ -73,7 +73,7 @@ export const useRegisterUser = () => {
 };
 
 // регистрация пользователя
-const loginUser = async (body: object): Promise<Response> => {
+const loginUser = async (body: object): Promise<ResponseType> => {
   return customFetch("/user/login", "POST", body);
 };
 
