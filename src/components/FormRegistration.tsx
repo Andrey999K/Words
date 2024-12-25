@@ -1,4 +1,5 @@
 import { Button, Form, Input } from "antd";
+import { useRegisterUser } from "../api/api.ts";
 
 const formItemLayout = {
   labelCol: {
@@ -26,9 +27,13 @@ const tailFormItemLayout = {
 
 export const FormRegistration = () => {
   const [form] = Form.useForm();
+  const { mutateAsync: userRegister } = useRegisterUser();
 
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
+    userRegister(values).then(result => {
+      console.log(result);
+    });
   };
 
   return (
@@ -86,7 +91,7 @@ export const FormRegistration = () => {
                 return Promise.resolve();
               }
               return Promise.reject(
-                new Error("The new password that you entered do not match!")
+                new Error("The new password that you entered do not match!"),
               );
             },
           }),
