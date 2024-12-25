@@ -17,6 +17,7 @@ export const queryClient = new QueryClient({
 const keys = {
   checkAuthUser: "checkAuthUser",
   registerUser: "registerUser",
+  loginUser: "loginUser",
 };
 
 axios.defaults.withCredentials = true;
@@ -68,5 +69,17 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationKey: [keys.registerUser],
     mutationFn: registerUser,
+  });
+};
+
+// регистрация пользователя
+const loginUser = async (body: object): Promise<Response> => {
+  return customFetch("/user/login", "POST", body);
+};
+
+export const useLoginUser = () => {
+  return useMutation({
+    mutationKey: [keys.loginUser],
+    mutationFn: loginUser,
   });
 };
