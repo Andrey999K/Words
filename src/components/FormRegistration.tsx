@@ -1,6 +1,9 @@
 import { Button, Form, Input, Modal } from "antd";
 import { useRegisterUser } from "../api/api.ts";
 import { useState } from "react";
+import { PageLoader } from "./PageLoader.tsx";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "../utils/routesConfig.ts";
 
 const formItemLayout = {
   labelCol: {
@@ -28,7 +31,8 @@ const tailFormItemLayout = {
 
 export const FormRegistration = () => {
   const [form] = Form.useForm();
-  const { mutateAsync: userRegister } = useRegisterUser();
+  const navigate = useNavigate();
+  const { mutateAsync: userRegister, isPending } = useRegisterUser();
   const [status, setStatus] = useState<null | {
     title: string,
     description?: string,
@@ -45,12 +49,15 @@ export const FormRegistration = () => {
         setStatus({
           title: "Пользователь с таким email уже существует",
         });
+      } else {
+        navigate(Routes.HOME);
       }
     });
   };
 
   return (
     <>
+      {isPending && <PageLoader />}
       <Modal title={status?.title} open={!!status} onOk={handleOk} cancelButtonProps={{ hidden: true }}></Modal>
       <Form
         {...formItemLayout}
