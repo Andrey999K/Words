@@ -14,3 +14,9 @@ export type LoginFields = {
   password?: string;
   remember?: string;
 };
+
+export type Guess = {
+  id: number,
+  word: string,
+  guess: string,
+}
