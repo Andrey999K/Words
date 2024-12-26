@@ -1,13 +1,17 @@
 import { Button, Radio, RadioChangeEvent } from "antd";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useNewGame } from "../../api/api.ts";
+import { PageLoader } from "../../components/PageLoader.tsx";
 
-export const StartFrame = () => {
+type StartFrame = {
+  onStart: () => void
+}
+
+export const StartFrame: FC<StartFrame> = ({ onStart }) => {
   const [value, setValue] = useState(1);
-  const { mutateAsync: startGame } = useNewGame();
+  const { mutateAsync: startGame, isPending } = useNewGame();
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
@@ -15,9 +19,15 @@ export const StartFrame = () => {
     startGame({
       difficulty: String(value),
     }).then(result => {
-      console.log("result", result);
+      if (result.status === "200") {
+        onStart();
+      }
     });
   };
+
+  if (isPending) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="flex flex-col gap-4">
