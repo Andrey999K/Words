@@ -17,6 +17,6 @@ export type LoginFields = {
 
 export type Guess = {
   id: number,
-  word: string,
   guess: string,
+  result: string,
 }
