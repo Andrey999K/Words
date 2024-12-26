@@ -18,6 +18,7 @@ const keys = {
   checkAuthUser: "checkAuthUser",
   registerUser: "registerUser",
   loginUser: "loginUser",
+  newGame: "newGame",
 };
 
 axios.defaults.withCredentials = true;
@@ -74,7 +75,7 @@ export const useRegisterUser = () => {
   });
 };
 
-// регистрация пользователя
+// вход
 const loginUser = async (body: LoginFields): Promise<ResponseType> => {
   return customFetch("/user/login", "POST", body);
 };
@@ -83,5 +84,19 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
+  });
+};
+
+// новая игра
+const newGame = async (body: {
+  difficulty: string,
+}): Promise<ResponseType> => {
+  return customFetch("/game/new", "POST", body);
+};
+
+export const useNewGame = () => {
+  return useMutation({
+    mutationKey: [keys.newGame],
+    mutationFn: newGame,
   });
 };
