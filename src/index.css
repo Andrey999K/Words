@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-modal-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.ant-modal {
+  top: 0 !important;
+}
+
+.ant-form-item {
+  margin-bottom: 0;
+}

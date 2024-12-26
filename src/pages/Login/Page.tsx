@@ -1,3 +1,9 @@
+import { FormLogin } from "../../components/FormLogin.tsx";
+
 export const Login = () => {
-  return <div>Login</div>;
+  return (
+    <div className="w-screen h-screen flex items-center justify-center">
+      <FormLogin />
+    </div>
+  );
 };

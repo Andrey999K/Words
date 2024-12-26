@@ -1,60 +1,64 @@
-import { Button, Checkbox, Form, FormProps, Input } from "antd";
+import { Button, Card, Form, FormProps, Input } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Routes } from "../utils/routesConfig.ts";
+import { useLoginUser } from "../api/api.ts";
+import { LoginFields } from "../types";
 
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
-};
-
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
+const onFinishFailed: FormProps<LoginFields>["onFinishFailed"] = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
 export const FormLogin = () => {
+  const { mutateAsync: loginUser } = useLoginUser();
+  const navigate = useNavigate();
+
+  const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
+    loginUser(values).then(response => {
+      if (response.status === "200") {
+        navigate(Routes.HOME);
+      }
+    });
+  };
+
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item<FieldType>
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: "Please input your username!" }]}
+    <Card className="p-4">
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        className="flex flex-col gap-4"
       >
-        <Input />
-      </Form.Item>
+        <Form.Item<LoginFields>
+          label="Username"
+          name="email"
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item<FieldType>
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
+        <Form.Item<LoginFields>
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-      <Form.Item<FieldType>
-        name="remember"
-        valuePropName="checked"
-        label={null}
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item label={null}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <div className="flex items-center w-full gap-4">
+          <Link to={Routes.REGISTRATION} className="w-full">
+            <Button className="w-full">
+              Registration
+            </Button>
+          </Link>
+          <Form.Item label={null} className="w-full mb-0">
+            <Button type="primary" htmlType="submit" className="w-full">
+              Login
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
+    </Card>
   );
 };

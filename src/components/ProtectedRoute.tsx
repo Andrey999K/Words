@@ -10,13 +10,19 @@ type ProtectedRouteProps = {
 
 export const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   const { data: userAuth, isLoading } = useGetUser();
+
   if (isLoading) return <PageLoader />;
-  if (
-    userAuth &&
-    "comment" in userAuth &&
-    userAuth.comment === "Non authorized"
-  ) {
-    return <Navigate to={Routes.LOGIN} />;
+  if (userAuth && "id" in userAuth) {
+    return <>{children}</>;
   }
-  return <>{children}</>;
+
+  return <Navigate to={Routes.LOGIN} />;
+  // if (
+  //   userAuth &&
+  //   "comment" in userAuth &&
+  //   userAuth.comment === "Non authorized"
+  // ) {
+  //   return <Navigate to={Routes.LOGIN} />;
+  // }
+
 };
