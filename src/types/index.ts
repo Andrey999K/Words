@@ -8,3 +8,9 @@ export type ResponseType = {
   request_type: "error" | "success",
   status: string
 }
+
+export type LoginFields = {
+  email?: string;
+  password?: string;
+  remember?: string;
+};

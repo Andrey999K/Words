@@ -1,22 +1,25 @@
 import { Button, Card, Form, FormProps, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
+import { useLoginUser } from "../api/api.ts";
+import { LoginFields } from "../types";
 
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
-};
-
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
+const onFinishFailed: FormProps<LoginFields>["onFinishFailed"] = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
 export const FormLogin = () => {
+  const { mutateAsync: loginUser } = useLoginUser();
+  const navigate = useNavigate();
+
+  const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
+    loginUser(values).then(response => {
+      if (response.status === "200") {
+        navigate(Routes.HOME);
+      }
+    });
+  };
+
   return (
     <Card className="p-4">
       <Form
@@ -27,15 +30,15 @@ export const FormLogin = () => {
         autoComplete="off"
         className="flex flex-col gap-4"
       >
-        <Form.Item<FieldType>
+        <Form.Item<LoginFields>
           label="Username"
-          name="username"
+          name="email"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item<FieldType>
+        <Form.Item<LoginFields>
           label="Password"
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}

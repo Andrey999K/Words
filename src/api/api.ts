@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { ResponseData, ResponseType } from "../types";
+import { LoginFields, ResponseData, ResponseType } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,17 +22,18 @@ const keys = {
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: isDev() ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
 const customFetch = async (url: string, method?: "GET" | "POST", body?: object) => {
   try {
     let response;
-    if (method === "GET") {
-      response = await axiosInstance.get(url);
-    } else {
+    if (method === "POST") {
       response = await axiosInstance.post(url, body);
+
+    } else {
+      response = await axiosInstance.get(url);
     }
     if (response.status === 200) {
       return response.data.result;
@@ -74,7 +75,7 @@ export const useRegisterUser = () => {
 };
 
 // регистрация пользователя
-const loginUser = async (body: object): Promise<ResponseType> => {
+const loginUser = async (body: LoginFields): Promise<ResponseType> => {
   return customFetch("/user/login", "POST", body);
 };
 
