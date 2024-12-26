@@ -3,22 +3,22 @@ import { Guess } from "../../types";
 export const mockData: Guess[] = [
   {
     id: 1,
-    word: "Слово",
-    guess: "45",
+    guess: "Слово",
+    result: "45",
   },
   {
     id: 2,
-    word: "Рука",
-    guess: "569",
+    guess: "Рука",
+    result: "569",
   },
   {
     id: 3,
-    word: "Машина",
-    guess: "1465",
+    guess: "Машина",
+    result: "1465",
   },
   {
     id: 4,
-    word: "Телефон",
-    guess: "6705",
+    guess: "Телефон",
+    result: "6705",
   },
 ];

@@ -19,6 +19,7 @@ const keys = {
   registerUser: "registerUser",
   loginUser: "loginUser",
   newGame: "newGame",
+  sendGuess: "sendGuess",
 };
 
 axios.defaults.withCredentials = true;
@@ -98,5 +99,19 @@ export const useNewGame = () => {
   return useMutation({
     mutationKey: [keys.newGame],
     mutationFn: newGame,
+  });
+};
+
+// проверить слово
+const sendGuess = async (word: string): Promise<ResponseType> => {
+  return customFetch("/game/guess", "POST", {
+    guess: word,
+  });
+};
+
+export const useSendGuess = () => {
+  return useMutation({
+    mutationKey: [keys.sendGuess],
+    mutationFn: sendGuess,
   });
 };
