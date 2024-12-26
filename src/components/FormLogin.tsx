@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, FormProps, Input } from "antd";
+import { Button, Card, Form, FormProps, Input } from "antd";
 import { Link } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
 
@@ -18,50 +18,44 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 
 export const FormLogin = () => {
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item<FieldType>
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: "Please input your username!" }]}
+    <Card className="p-4">
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        className="flex flex-col gap-4"
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<FieldType>
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item<FieldType>
-        name="remember"
-        valuePropName="checked"
-        label={null}
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <div className="flex items-center w-full">
-        <Form.Item label={null} className="w-full mb-0">
-          <Button type="primary" htmlType="submit">
-            Login
-          </Button>
+        <Form.Item<FieldType>
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input />
         </Form.Item>
-        <Button className="w-full">
-          <Link to={Routes.REGISTRATION}>Registration</Link>
-        </Button>
-      </div>
-    </Form>
+
+        <Form.Item<FieldType>
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <div className="flex items-center w-full gap-4">
+          <Link to={Routes.REGISTRATION} className="w-full">
+            <Button className="w-full">
+              Registration
+            </Button>
+          </Link>
+          <Form.Item label={null} className="w-full mb-0">
+            <Button type="primary" htmlType="submit" className="w-full">
+              Login
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
+    </Card>
   );
 };

@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { ResponseType } from "../types";
+import { ResponseData, ResponseType } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,10 +50,11 @@ const customFetch = async (url: string, method?: "GET" | "POST", body?: object) 
 
 // проверка юзера, что он залогинен
 export const checkAuthUser = async (): Promise<unknown> => {
-  return customFetch("/user");
+  const response = await customFetch("/user");
+  return response.data;
 };
 
-export const useGetUser = (): UseQueryResult<{ result: string }, Error> => {
+export const useGetUser = (): UseQueryResult<ResponseData, Error> => {
   return useQuery({
     queryKey: [keys.checkAuthUser],
     queryFn: checkAuthUser,

@@ -10,3 +10,7 @@
 .ant-modal {
   top: 0 !important;
 }
+
+.ant-form-item {
+  margin-bottom: 0;
+}
