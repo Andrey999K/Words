@@ -1,5 +1,5 @@
 import { KeyboardEvent, useState } from "react";
-import { Card, Input, Modal } from "antd";
+import { Card, Input, message, Modal } from "antd";
 import { useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 
@@ -23,23 +23,43 @@ export const GameFrame = () => {
           .toLowerCase()
           .replace("ё", "е");
       enterWord(inputValue).then(result => {
+        (event.target as HTMLInputElement).value = "";
         const guess = result.data;
         if (guess.result === "not a word") {
           console.log("not a word");
+          message.error("Такого слова нет");
           return;
         }
         if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
           setIsWin(true);
-          console.log("Ты выиграл!");
           return;
         }
-        setWords(Array.from(new Set([...words, {
+        const newGuess = {
           id: words.length !== 0 ? words[words.length - 1].id : 1,
           guess: guess.guess,
           result: guess.result,
-        }])));
+        };
+        if (guess.result === ">10000") {
+          if (words.find(word => word.result === guess.guess)) {
+            message.error("Это слово ты уже вводил");
+            return;
+          }
+          setWords([...words, newGuess]);
+          return;
+        }
+        const newMass = [...words, newGuess].sort((a, b) => {
+          const numberA = Number(a.result);
+          const numberB = Number(b.result);
+          if (numberA < numberB) {
+            return -1;
+          } else if (numberA > numberB) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        setWords(newMass);
       });
-      (event.target as HTMLInputElement).value = "";
     }
   };
 
