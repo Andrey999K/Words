@@ -34,7 +34,7 @@ export const FormLogin = () => {
           className="flex flex-col gap-4"
         >
           <Form.Item<LoginFields>
-            label="Username"
+            label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
