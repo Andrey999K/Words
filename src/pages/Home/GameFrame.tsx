@@ -2,13 +2,11 @@ import { KeyboardEvent, useState } from "react";
 import { Card, Input, message, Modal } from "antd";
 import { useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
-import { useNavigate } from "react-router-dom";
 
 export const GameFrame = () => {
   const { mutateAsync: enterWord } = useSendGuess();
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<boolean | string>(false);
-  const navigate = useNavigate();
 
   const handleOk = () => {
     setIsWin(false);
