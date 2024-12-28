@@ -9,11 +9,15 @@ export const Home = () => {
     setStartGame(true);
   };
 
+  const onMainMenu = () => {
+    setStartGame(false);
+  };
+
   return (
     <div className="w-full h-screen flex items-center justify-center">
       {
         startGame
-          ? <GameFrame />
+          ? <GameFrame onMoveMain={onMainMenu} />
           : <StartFrame onStart={onStartGame} />
       }
     </div>
