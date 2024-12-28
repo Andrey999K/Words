@@ -1,7 +1,8 @@
-import { KeyboardEvent, useState } from "react";
-import { Card, Input, message, Modal } from "antd";
+import { useState } from "react";
+import { Card, message, Modal } from "antd";
 import { useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
+import { MainInput } from "../../components/MainInput.tsx";
 
 export const GameFrame = () => {
   const { mutateAsync: enterWord } = useSendGuess();
@@ -16,62 +17,51 @@ export const GameFrame = () => {
     setIsWin(false);
   };
 
-  const onEnterWord = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const inputValue =
-        (event.target as HTMLInputElement).value
-          .toLowerCase()
-          .replace("ё", "е");
-      enterWord(inputValue).then(result => {
-        (event.target as HTMLInputElement).value = "";
-        const guess = result.data;
-        if (guess.result === "not a word") {
-          console.log("not a word");
-          message.error("Такого слова нет");
+  const onEnterWord = (value: string) => {
+    enterWord(value).then(result => {
+      const guess = result.data;
+      if (guess.result === "not a word") {
+        console.log("not a word");
+        message.error("Такого слова нет");
+        return;
+      }
+      if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
+        setIsWin(guess.pp);
+        return;
+      }
+      const newGuess = {
+        id: words.length !== 0 ? words[words.length - 1].id : 1,
+        guess: guess.guess,
+        result: guess.result,
+      };
+      if (guess.result === ">10000") {
+        if (words.find(word => word.result === guess.guess)) {
+          message.error("Это слово ты уже вводил");
           return;
         }
-        if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
-          setIsWin(guess.pp);
-          return;
+        setWords([...words, newGuess]);
+        return;
+      }
+      const newMass = [...words, newGuess].sort((a, b) => {
+        const numberA = Number(a.result);
+        const numberB = Number(b.result);
+        if (numberA < numberB) {
+          return -1;
+        } else if (numberA > numberB) {
+          return 1;
+        } else {
+          return 0;
         }
-        const newGuess = {
-          id: words.length !== 0 ? words[words.length - 1].id : 1,
-          guess: guess.guess,
-          result: guess.result,
-        };
-        if (guess.result === ">10000") {
-          if (words.find(word => word.result === guess.guess)) {
-            message.error("Это слово ты уже вводил");
-            return;
-          }
-          setWords([...words, newGuess]);
-          return;
-        }
-        const newMass = [...words, newGuess].sort((a, b) => {
-          const numberA = Number(a.result);
-          const numberB = Number(b.result);
-          if (numberA < numberB) {
-            return -1;
-          } else if (numberA > numberB) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        setWords(newMass);
       });
-    }
+      setWords(newMass);
+    });
   };
 
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
-          <Input
-            className="w-full"
-            placeholder="Введите слово"
-            onKeyPress={onEnterWord}
-          />
+          <MainInput onEnter={onEnterWord} />
           <div className="flex flex-col mt-5 w-full gap-2">
             {
               words.map(word => (
