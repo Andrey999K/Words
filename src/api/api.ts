@@ -116,7 +116,12 @@ export const useNewGame = () => {
 };
 
 // проверить слово
-const sendGuess = async (word: string): Promise<ResponseType> => {
+const sendGuess = async (word: string): Promise<ResponseType<{
+  comment: string | null,
+  guess: string,
+  pp: number
+  result: string
+}>> => {
   return customFetch("/game/guess", "POST", {
     guess: word,
   });

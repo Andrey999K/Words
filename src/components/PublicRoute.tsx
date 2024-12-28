@@ -1,25 +1,19 @@
-import { FC } from "react";
 import { useGetUser } from "../api/api.ts";
 import { PageLoader } from "./PageLoader.tsx";
 import { Navigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
-import { Header } from "./Header.tsx";
+import { FC } from "react";
 import { RouteProps } from "../types";
 
-export const ProtectedRoute: FC<RouteProps> = ({ children }) => {
+export const PublicRoute: FC<RouteProps> = ({ children }) => {
   const { data: userAuth, isLoading } = useGetUser();
 
   if (isLoading) return <PageLoader />;
-  if (userAuth && "id" in userAuth) {
-    return <div className="h-screen w-full">
-      <Header />
-      <div className="flex h-full justify-center">
-        {children}
-      </div>
-    </div>;
+  if (!userAuth || !("id" in userAuth)) {
+    return children;
   }
 
-  return <Navigate to={Routes.LOGIN} />;
+  return <Navigate to={Routes.HOME} />;
   // if (
   //   userAuth &&
   //   "comment" in userAuth &&
@@ -27,5 +21,4 @@ export const ProtectedRoute: FC<RouteProps> = ({ children }) => {
   // ) {
   //   return <Navigate to={Routes.LOGIN} />;
   // }
-
 };

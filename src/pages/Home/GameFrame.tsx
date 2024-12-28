@@ -1,26 +1,37 @@
 import { FC, useState } from "react";
 import { message, Modal } from "antd";
-import { useSendGuess } from "../../api/api.ts";
+import { useNewGame, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
+import { PageLoader } from "../../components/PageLoader.tsx";
 
 type GameFrameProps = {
-  onMoveMain: () => void
+  onMoveMain: () => void,
+  difficulty: string
 }
 
-export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
+export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
   const { mutateAsync: enterWord } = useSendGuess();
+  const { mutateAsync: startGame, isPending: isPendingNewGame } = useNewGame();
   const [words, setWords] = useState<Guess[]>([]);
-  const [isWin, setIsWin] = useState<boolean | string>(false);
+  const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
 
   const handleOk = () => {
-    setIsWin(false);
+    startGame({
+      difficulty: String(difficulty),
+    }).then(result => {
+      if (result.status === "200") {
+        setWords([]);
+        setIsWin(null);
+        setCurrentWord(null);
+      }
+    });
   };
 
   const handleCancel = () => {
-    setIsWin(false);
+    setIsWin(null);
     onMoveMain();
   };
 
@@ -32,16 +43,17 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
         message.error("Такого слова нет");
         return;
       }
+      const newGuess = {
+        id: words.length !== 0 ? words[words.length - 1].id : 1,
+        guess: guess.guess,
+        result: guess.result,
+        pp: guess.pp,
+      };
       if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
-        setIsWin(guess.pp);
+        setIsWin(newGuess);
         return;
       }
       if (!words.find(word => word.guess === guess.guess)) {
-        const newGuess = {
-          id: words.length !== 0 ? words[words.length - 1].id : 1,
-          guess: guess.guess,
-          result: guess.result,
-        };
         setCurrentWord(newGuess);
         if (guess.result.startsWith(">")) {
           if (words.find(word => word.result === guess.guess)) {
@@ -69,6 +81,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     });
   };
 
+  if (isPendingNewGame) return <PageLoader />;
+
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
@@ -88,11 +102,16 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           </div>
         </div>
       </div>
-      <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
-             cancelText="Главное меню">
-        <p>Ты угадал, йоу, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
-        <p>Ты получил <b>{isWin}</b> pp.</p>
-      </Modal>
+      {
+        !!isWin && (
+          <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
+                 cancelText="Главное меню">
+            <p>Ты угадал, йоу, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
+            <p>Загаданное слово <b>{isWin.guess}</b>.</p>
+            <p>Ты получил <b>{isWin.pp}</b> pp.</p>
+          </Modal>
+        )
+      }
     </>
   );
 };
