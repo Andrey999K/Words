@@ -2,11 +2,13 @@ import { KeyboardEvent, useState } from "react";
 import { Card, Input, message, Modal } from "antd";
 import { useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 export const GameFrame = () => {
   const { mutateAsync: enterWord } = useSendGuess();
   const [words, setWords] = useState<Guess[]>([]);
-  const [isWin, setIsWin] = useState(false);
+  const [isWin, setIsWin] = useState<boolean | string>(false);
+  const navigate = useNavigate();
 
   const handleOk = () => {
     setIsWin(false);
@@ -31,7 +33,7 @@ export const GameFrame = () => {
           return;
         }
         if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
-          setIsWin(true);
+          setIsWin(guess.pp);
           return;
         }
         const newGuess = {
@@ -86,9 +88,10 @@ export const GameFrame = () => {
           </div>
         </div>
       </div>
-      <Modal title="Basic Modal" open={isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
+      <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
              cancelText="Главное меню">
-        Ты угадал, ой, красава, мэээээээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪
+        <p>Ты угадал, ой, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
+        <p>Ты получил <b>{isWin}</b> pp.</p>
       </Modal>
     </>
   );
