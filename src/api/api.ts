@@ -20,6 +20,7 @@ const keys = {
   loginUser: "loginUser",
   newGame: "newGame",
   sendGuess: "sendGuess",
+  logoutUser: "logoutUser",
 };
 
 axios.defaults.withCredentials = true;
@@ -85,6 +86,18 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
+  });
+};
+
+// выход
+const logoutUser = async (): Promise<ResponseType> => {
+  return customFetch("/user/login", "POST");
+};
+
+export const useLogoutUser = () => {
+  return useMutation({
+    mutationKey: [keys.logoutUser],
+    mutationFn: logoutUser,
   });
 };
 
