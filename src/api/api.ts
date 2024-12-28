@@ -24,8 +24,7 @@ const keys = {
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  // baseURL: isDev() ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: window.location.href === "http://front.dev.local:5100/" ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
