@@ -91,7 +91,7 @@ export const useLoginUser = () => {
 
 // выход
 const logoutUser = async (): Promise<ResponseType> => {
-  return customFetch("/user/login", "POST");
+  return customFetch("/user/logout", "POST");
 };
 
 export const useLogoutUser = () => {
