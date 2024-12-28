@@ -57,6 +57,13 @@ export const GameFrame = () => {
     });
   };
 
+  const colorCard = (result: string) => {
+    const res = Number(result);
+    if (isNaN(res) || res > 1000) return "border-red-500";
+    if (res > 100) return "border-orange-500";
+    else return "border-green-500";
+  };
+
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
@@ -65,7 +72,7 @@ export const GameFrame = () => {
           <div className="flex flex-col mt-5 w-full gap-2">
             {
               words.map(word => (
-                <Card key={word.id} className="font-bold border-gray-500 border-2">
+                <Card key={word.id} className={`font-bold ${colorCard(word.result)} border-2`}>
                   <div className="flex justify-between w-full items-center">
                     <span>{word.guess}</span>
                     <span>{word.result}</span>
