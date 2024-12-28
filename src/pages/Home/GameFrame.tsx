@@ -1,45 +1,61 @@
-import { KeyboardEvent, useState } from "react";
-import { Card, Input, message, Modal } from "antd";
-import { useSendGuess } from "../../api/api.ts";
+import { FC, useState } from "react";
+import { message, Modal } from "antd";
+import { useNewGame, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
+import { MainInput } from "../../components/MainInput.tsx";
+import { CardWord } from "../../components/CardWord.tsx";
+import { PageLoader } from "../../components/PageLoader.tsx";
 
-export const GameFrame = () => {
+type GameFrameProps = {
+  onMoveMain: () => void,
+  difficulty: string
+}
+
+export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
   const { mutateAsync: enterWord } = useSendGuess();
+  const { mutateAsync: startGame, isPending: isPendingNewGame } = useNewGame();
   const [words, setWords] = useState<Guess[]>([]);
-  const [isWin, setIsWin] = useState<boolean | string>(false);
+  const [isWin, setIsWin] = useState<null | Guess>(null);
+  const [currentWord, setCurrentWord] = useState<null | Guess>(null);
 
   const handleOk = () => {
-    setIsWin(false);
+    startGame({
+      difficulty: String(difficulty),
+    }).then(result => {
+      if (result.status === "200") {
+        setWords([]);
+        setIsWin(null);
+        setCurrentWord(null);
+      }
+    });
   };
 
   const handleCancel = () => {
-    setIsWin(false);
+    setIsWin(null);
+    onMoveMain();
   };
 
-  const onEnterWord = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const inputValue =
-        (event.target as HTMLInputElement).value
-          .toLowerCase()
-          .replace("ё", "е");
-      enterWord(inputValue).then(result => {
-        (event.target as HTMLInputElement).value = "";
-        const guess = result.data;
-        if (guess.result === "not a word") {
-          console.log("not a word");
-          message.error("Такого слова нет");
-          return;
-        }
-        if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
-          setIsWin(guess.pp);
-          return;
-        }
-        const newGuess = {
-          id: words.length !== 0 ? words[words.length - 1].id : 1,
-          guess: guess.guess,
-          result: guess.result,
-        };
-        if (guess.result === ">10000") {
+  const onEnterWord = (value: string) => {
+    enterWord(value).then(result => {
+      const guess = result.data;
+      if (guess.result === "not a word") {
+        console.log("not a word");
+        message.error("Такого слова нет");
+        return;
+      }
+      const newGuess = {
+        id: words.length !== 0 ? words[words.length - 1].id : 1,
+        guess: guess.guess,
+        result: guess.result,
+        pp: guess.pp,
+      };
+      if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
+        setIsWin(newGuess);
+        return;
+      }
+      if (!words.find(word => word.guess === guess.guess)) {
+        setCurrentWord(newGuess);
+        if (guess.result.startsWith(">")) {
           if (words.find(word => word.result === guess.guess)) {
             message.error("Это слово ты уже вводил");
             return;
@@ -47,7 +63,7 @@ export const GameFrame = () => {
           setWords([...words, newGuess]);
           return;
         }
-        const newMass = [...words, newGuess].sort((a, b) => {
+        const newMass = [...words.filter(word => !word.result.startsWith(">")), newGuess, ...words.filter(word => word.result.startsWith(">"))].sort((a, b) => {
           const numberA = Number(a.result);
           const numberB = Number(b.result);
           if (numberA < numberB) {
@@ -59,38 +75,43 @@ export const GameFrame = () => {
           }
         });
         setWords(newMass);
-      });
-    }
+      } else {
+        message.error("Это слово уже было введено");
+      }
+    });
   };
+
+  if (isPendingNewGame) return <PageLoader />;
 
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
-          <Input
-            className="w-full"
-            placeholder="Введите слово"
-            onKeyPress={onEnterWord}
-          />
+          <MainInput onEnter={onEnterWord} />
+          {currentWord && (
+            <div className="mt-2">
+              <CardWord data={currentWord} />
+            </div>
+          )}
           <div className="flex flex-col mt-5 w-full gap-2">
             {
               words.map(word => (
-                <Card key={word.id} className="font-bold border-gray-500 border-2">
-                  <div className="flex justify-between w-full items-center">
-                    <span>{word.guess}</span>
-                    <span>{word.result}</span>
-                  </div>
-                </Card>
+                <CardWord key={word.id} data={word} />
               ))
             }
           </div>
         </div>
       </div>
-      <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
-             cancelText="Главное меню">
-        <p>Ты угадал, ой, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
-        <p>Ты получил <b>{isWin}</b> pp.</p>
-      </Modal>
+      {
+        !!isWin && (
+          <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
+                 cancelText="Главное меню">
+            <p>Ты угадал, йоу, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
+            <p>Загаданное слово <b>{isWin.guess}</b>.</p>
+            <p>Ты получил <b>{isWin.pp}</b> pp.</p>
+          </Modal>
+        )
+      }
     </>
   );
 };

@@ -4,7 +4,7 @@ import { useNewGame } from "../../api/api.ts";
 import { PageLoader } from "../../components/PageLoader.tsx";
 
 type StartFrame = {
-  onStart: () => void
+  onStart: (difficulty: string) => void
 }
 
 export const StartFrame: FC<StartFrame> = ({ onStart }) => {
@@ -20,7 +20,7 @@ export const StartFrame: FC<StartFrame> = ({ onStart }) => {
       difficulty: String(value),
     }).then(result => {
       if (result.status === "200") {
-        onStart();
+        onStart(String(value));
       }
     });
   };

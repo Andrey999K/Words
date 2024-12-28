@@ -20,12 +20,12 @@ const keys = {
   loginUser: "loginUser",
   newGame: "newGame",
   sendGuess: "sendGuess",
+  logoutUser: "logoutUser",
 };
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  // baseURL: isDev() ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: window.location.href === "http://front.dev.local:5100/" ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
@@ -89,6 +89,18 @@ export const useLoginUser = () => {
   });
 };
 
+// выход
+const logoutUser = async (): Promise<ResponseType> => {
+  return customFetch("/user/logout", "POST");
+};
+
+export const useLogoutUser = () => {
+  return useMutation({
+    mutationKey: [keys.logoutUser],
+    mutationFn: logoutUser,
+  });
+};
+
 // новая игра
 const newGame = async (body: {
   difficulty: string,
@@ -104,7 +116,12 @@ export const useNewGame = () => {
 };
 
 // проверить слово
-const sendGuess = async (word: string): Promise<ResponseType> => {
+const sendGuess = async (word: string): Promise<ResponseType<{
+  comment: string | null,
+  guess: string,
+  pp: number
+  result: string
+}>> => {
   return customFetch("/game/guess", "POST", {
     guess: word,
   });
