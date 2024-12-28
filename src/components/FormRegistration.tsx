@@ -30,7 +30,6 @@ export const FormRegistration = () => {
 
   const onFinish = (values: any) => {
     userRegister(values).then(response => {
-      console.log(response);
       if (response.status === "409") {
         setStatus({
           title: "Пользователь с таким email уже существует",

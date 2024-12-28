@@ -1,4 +1,4 @@
-import { Button, Card, Form, FormProps, Input } from "antd";
+import { Button, Card, Form, FormProps, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
 import { useLoginUser } from "../api/api.ts";
@@ -17,6 +17,8 @@ export const FormLogin = () => {
     loginUser(values).then(response => {
       if (response.status === "200") {
         navigate(Routes.HOME);
+      } else {
+        message.error("Неправильный логин или пароль");
       }
     });
   };
@@ -34,7 +36,7 @@ export const FormLogin = () => {
           className="flex flex-col gap-4"
         >
           <Form.Item<LoginFields>
-            label="Username"
+            label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your username!" }]}
           >

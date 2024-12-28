@@ -36,6 +36,7 @@ export const StartFrame: FC<StartFrame> = ({ onStart }) => {
         <Radio value={2}>Лёгкий</Radio>
         <Radio value={3}>Средний</Radio>
         <Radio value={4}>Сложный</Radio>
+        <Radio value={5}>Безумный</Radio>
       </Radio.Group>
       <Button onClick={handleStart}>Начать игру</Button>
     </div>
