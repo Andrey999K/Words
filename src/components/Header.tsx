@@ -4,6 +4,7 @@ import { Button, Dropdown, MenuProps } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
+import { SwitchTheme } from "./SwitchTheme.tsx";
 
 export const Header = () => {
   const { data: user, isLoading } = useGetUser();
@@ -23,8 +24,16 @@ export const Header = () => {
     //   label: <NavLink to={Routes.ME}>Профиль</NavLink>,
     // },
     {
+      key: "1",
+      label: (
+        <div onClick={(e) => e.stopPropagation()}>
+          <SwitchTheme />
+        </div>
+      ),
+    },
+    {
       key: "2",
-      label: <Button onClick={handleExit}>Выход</Button>,
+      label: <Button type="primary" onClick={handleExit}>Выход</Button>,
     },
   ];
 
@@ -35,7 +44,7 @@ export const Header = () => {
       <div className="flex gap-1 items-center">
         <span>{user.email}</span>
         <Dropdown menu={{ items }} placement="bottomLeft">
-          <div className="flex justify-center items-center p-2 rounded-full bg-blue-400 cursor-pointer text-white">
+          <div className="flex justify-center items-center p-2 rounded-full bg-green-700 cursor-pointer text-white">
             <UserOutlined />
           </div>
         </Dropdown>
