@@ -5,11 +5,14 @@ import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
 import { SwitchTheme } from "./SwitchTheme.tsx";
+import { useContext } from "react";
+import { ThemeContext } from "../App.tsx";
 
 export const Header = () => {
   const { data: user, isLoading } = useGetUser();
   const { mutateAsync: logoutUser } = useLogoutUser();
   const navigate = useNavigate();
+  const theme = useContext(ThemeContext);
 
   const handleExit = () => {
     logoutUser().then(result => {
@@ -41,9 +44,9 @@ export const Header = () => {
 
   return (
     <div className="absolute top-0 p-5 flex w-full justify-end">
-      <div className="flex gap-1 items-center">
+      <div className="dark:text-white flex gap-1 items-center">
         <span>{user.email}</span>
-        <Dropdown menu={{ items }} placement="bottomLeft">
+        <Dropdown menu={{ items }} placement="bottomLeft" overlayClassName={theme?.darkTheme ? `dark` : ""}>
           <div className="flex justify-center items-center p-2 rounded-full bg-green-700 cursor-pointer text-white">
             <UserOutlined />
           </div>

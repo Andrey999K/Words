@@ -26,7 +26,7 @@ export const FormLogin = () => {
   return (
     <>
       {isPending && <PageLoader />}
-      <Card className="p-4 dark:bg-black">
+      <Card className="p-4 dark:bg-gray-300 ">
         <Form
           name="basic"
           initialValues={{ remember: true }}

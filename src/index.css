@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --first-gray: #403f3f;
+  --second-gray: #5e5d5d;
+}
+
 .ant-modal-wrap {
   display: flex;
   align-items: center;
@@ -20,5 +25,56 @@
 }
 
 .dark {
-  background: #343434;
+  background: #343434 !important;
+}
+
+.dark .ant-dropdown-menu {
+  background: var(--first-gray) !important;
+  border-color: var(--second-gray) !important;
+}
+
+.dark .ant-card, .dark .ant-dropdown.ant-dropdown-menu {
+  color: white;
+  background: var(--first-gray) !important;
+  border-color: var(--second-gray) !important;
+}
+
+.dark .card-word.red {
+  border-color: #871111 !important;
+}
+
+.dark .card-word.orange {
+  border-color: #b56305 !important;
+}
+
+.dark .card-word.green {
+  border-color: #026a02 !important;
+}
+
+/*.dark-theme .ant-dropdown.ant-dropdown-menu {*/
+/*  background: var(--first-gray) !important;*/
+/*  border-color: var(--second-gray) !important;*/
+/*}*/
+
+.dark .ant-input, .dark .ant-input-password {
+  background: var(--first-gray) !important;
+  border-color: var(--second-gray) !important;
+  color: #fff;
+}
+
+.dark *::-webkit-input-placeholder {
+  color: #9e9e9e;
+}
+
+.dark .ant-input:focus, .dark .ant-input-password:focus {
+  /*box-shadow: 0 0 0 2px rgba(41, 136, 10, 0.33);*/
+}
+
+.dark .ant-radio-inner::after {
+  background-color: var(--first-gray);
+}
+
+.dark .ant-radio-inner {
+  background: var(--first-gray);
+  border-color: var(--second-gray);
 }
