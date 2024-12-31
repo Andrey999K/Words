@@ -93,7 +93,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
               <CardWord data={currentWord} />
             </div>
           )}
-          <div className="flex flex-col mt-5 w-full gap-2">
+          <div className="flex flex-col mt-5 w-full gap-2 max-h-[calc(100vh*0.7)] overflow-auto">
             {
               words.map(word => (
                 <CardWord key={word.id} data={word} />
