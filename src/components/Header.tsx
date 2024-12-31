@@ -29,7 +29,8 @@ export const Header = () => {
     {
       key: "1",
       label: (
-        <div onClick={(e) => e.stopPropagation()}>
+        <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 dark:text-white">
+          <span>Тёмная тема</span>
           <SwitchTheme />
         </div>
       ),
