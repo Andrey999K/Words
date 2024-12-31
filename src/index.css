@@ -78,3 +78,31 @@
   background: var(--first-gray);
   border-color: var(--second-gray);
 }
+
+* {
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray; /* цвет бегунка */
+    border-radius: 5px;
+    margin: 0 auto;
+  }
+}
+
+.dark * {
+
+  &::-webkit-scrollbar-track {
+    background: var(--first-gray); /* цвет зоны отслеживания */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--second-gray); /* цвет бегунка */
+    /*border: 3px solid orange;  !* отступ вокруг бегунка *!*/
+    border-left: 1px solid var(--second-gray);
+    border-right: 1px solid var(--second-gray);
+  }
+}

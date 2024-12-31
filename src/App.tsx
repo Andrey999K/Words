@@ -5,7 +5,7 @@ import { Routes } from "./utils/routesConfig.ts";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Registration } from "./pages/Registration/Page.tsx";
 import { ConfigProvider } from "antd";
-import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +32,10 @@ const router = createBrowserRouter([
 
 const getDarkTheme = () => {
   const darkTheme = localStorage.getItem("dark");
-  console.log("darkTheme", darkTheme);
-  return darkTheme !== null ? JSON.parse(darkTheme) : false;
+  if (darkTheme === null) {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  return JSON.parse(darkTheme);
 };
 
 export const ThemeContext = createContext<undefined | {
@@ -42,10 +44,6 @@ export const ThemeContext = createContext<undefined | {
 
 export const App = () => {
   const [darkTheme, setDarkTheme] = useState(getDarkTheme());
-
-  useEffect(() => {
-    localStorage.setItem("dark", darkTheme);
-  }, [darkTheme]);
 
   return (
     <div className={darkTheme ? "dark" : ""}>

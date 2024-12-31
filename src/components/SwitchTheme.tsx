@@ -8,6 +8,7 @@ export const SwitchTheme = () => {
   const handleChange = (checked: boolean): void => {
     if (theme?.setDarkTheme) {
       theme.setDarkTheme(checked);
+      localStorage.setItem("dark", JSON.stringify(checked));
     }
   };
 
