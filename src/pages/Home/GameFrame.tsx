@@ -1,36 +1,21 @@
 import { FC, useState } from "react";
 import { message, Modal } from "antd";
-import { useNewGame, useSendGuess } from "../../api/api.ts";
+import { useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
-import { PageLoader } from "../../components/PageLoader.tsx";
 
 type GameFrameProps = {
-  onMoveMain: () => void,
-  difficulty: string
+  onMoveMain: () => void
 }
 
-export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
+export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: enterWord } = useSendGuess();
-  const { mutateAsync: startGame, isPending: isPendingNewGame } = useNewGame();
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
 
   const handleOk = () => {
-    startGame({
-      difficulty: String(difficulty),
-    }).then(result => {
-      if (result.status === "200") {
-        setWords([]);
-        setIsWin(null);
-        setCurrentWord(null);
-      }
-    });
-  };
-
-  const handleCancel = () => {
     setIsWin(null);
     onMoveMain();
   };
@@ -81,8 +66,6 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
     });
   };
 
-  if (isPendingNewGame) return <PageLoader />;
-
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
@@ -104,8 +87,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain, difficulty }) => {
       </div>
       {
         !!isWin && (
-          <Modal title="Победа!" open={!!isWin} onOk={handleOk} onCancel={handleCancel} okText="Новая игра"
-                 cancelText="Главное меню">
+          <Modal title="Победа!" open={!!isWin} onOk={handleOk} okText="Новая игра" cancelButtonProps={{ hidden: true }}>
             <p>Ты угадал, йоу, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
             <p>Загаданное слово <b>{isWin.guess}</b>.</p>
             <p>Ты получил <b>{isWin.pp}</b> pp.</p>

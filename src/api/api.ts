@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { LoginFields, ResponseData, ResponseType } from "../types";
+import { LoginFields, ResponseType, UserData } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,7 +58,7 @@ export const checkAuthUser = async (): Promise<unknown> => {
   return response.data;
 };
 
-export const useGetUser = (): UseQueryResult<ResponseData, Error> => {
+export const useGetUser = (): UseQueryResult<UserData, Error> => {
   return useQuery({
     queryKey: [keys.checkAuthUser],
     queryFn: checkAuthUser,

@@ -5,6 +5,17 @@ export type ResponseData = {
   [key: string]: any;
 };
 
+export type UserData = {
+  comment: string,
+  email: string,
+  hasPass: boolean,
+  history: {
+    guess: string, result: string
+  }[],
+  id: 20,
+  username: string
+}
+
 export type ResponseType<T = ResponseData> = {
   data: T,
   request_type: "error" | "success",
