@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
-import { message, Modal } from "antd";
-import { useSendGuess } from "../../api/api.ts";
+import { FC, useEffect, useState } from "react";
+import { Button, message, Modal } from "antd";
+import { useGetUser, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -14,6 +14,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
+  const { data: user } = useGetUser();
 
   const handleOk = () => {
     setIsWin(null);
@@ -29,7 +30,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
         return;
       }
       const newGuess = {
-        id: words.length !== 0 ? words[words.length - 1].id : 1,
+        id: String(words.length !== 0 ? words[words.length - 1].id : 1),
         guess: guess.guess,
         result: guess.result,
         pp: guess.pp,
@@ -66,10 +67,19 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     });
   };
 
+  useEffect(() => {
+    if (user && user?.history.length !== 0) {
+      setWords(user?.history.map(word => ({ ...word, id: word.guess })));
+    }
+  }, [user]);
+
   return (
     <>
       <div className="h-screen pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
+          <div className="mb-4 flex justify-center">
+            <Button type="primary" onClick={handleOk}>Новая игра</Button>
+          </div>
           <MainInput onEnter={onEnterWord} />
           {currentWord && (
             <div className="mt-2">
