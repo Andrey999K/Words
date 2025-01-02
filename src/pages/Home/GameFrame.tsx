@@ -4,6 +4,7 @@ import { useGetUser, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
+import { PageLoader } from "../../components/PageLoader.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -14,7 +15,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
-  const { data: user } = useGetUser();
+  const { data: user, isLoading: isLoadingUser } = useGetUser();
 
   const handleOk = () => {
     setIsWin(null);
@@ -68,10 +69,12 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   useEffect(() => {
-    if (user && user?.history.length !== 0) {
+    if (user) {
       setWords(user?.history.map(word => ({ ...word, id: word.guess })));
     }
   }, [user]);
+
+  if (isLoadingUser) return <PageLoader />;
 
   return (
     <>
