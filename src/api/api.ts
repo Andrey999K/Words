@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { LoginFields, ResponseData, ResponseType } from "../types";
+import { LoginFields, ResponseType, UserData } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,8 +14,8 @@ export const queryClient = new QueryClient({
   },
 });
 
-const keys = {
-  checkAuthUser: "checkAuthUser",
+export const keys = {
+  user: "user",
   registerUser: "registerUser",
   loginUser: "loginUser",
   newGame: "newGame",
@@ -52,15 +52,15 @@ const customFetch = async (url: string, method?: "GET" | "POST", body?: object) 
   }
 };
 
-// проверка юзера, что он залогинен
+// получение данных текущего пользователя
 export const checkAuthUser = async (): Promise<unknown> => {
   const response = await customFetch("/user");
   return response.data;
 };
 
-export const useGetUser = (): UseQueryResult<ResponseData, Error> => {
+export const useGetUser = (): UseQueryResult<UserData, Error> => {
   return useQuery({
-    queryKey: [keys.checkAuthUser],
+    queryKey: [keys.user],
     queryFn: checkAuthUser,
   });
 };
@@ -112,6 +112,12 @@ export const useNewGame = () => {
   return useMutation({
     mutationKey: [keys.newGame],
     mutationFn: newGame,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 
