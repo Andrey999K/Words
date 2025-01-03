@@ -38,3 +38,8 @@ export type Guess = {
 export type RouteProps = {
   children: ReactNode;
 };
+
+export type Hint = {
+  comment: string,
+  hint: string
+}

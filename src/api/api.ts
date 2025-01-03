@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { LoginFields, ResponseType, UserData } from "../types";
+import { Hint, LoginFields, ResponseType, UserData } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +21,7 @@ export const keys = {
   newGame: "newGame",
   sendGuess: "sendGuess",
   logoutUser: "logoutUser",
+  hint: "hint",
 };
 
 axios.defaults.withCredentials = true;
@@ -34,7 +35,6 @@ const customFetch = async (url: string, method?: "GET" | "POST", body?: object) 
     let response;
     if (method === "POST") {
       response = await axiosInstance.post(url, body);
-
     } else {
       response = await axiosInstance.get(url);
     }
@@ -137,5 +137,17 @@ export const useSendGuess = () => {
   return useMutation({
     mutationKey: [keys.sendGuess],
     mutationFn: sendGuess,
+  });
+};
+
+// получение подсказки
+const getHint = async (): Promise<ResponseType<Hint>> => {
+  return customFetch("/game/hint");
+};
+
+export const useGetHint = () => {
+  return useMutation({
+    mutationKey: [keys.hint],
+    mutationFn: getHint,
   });
 };
