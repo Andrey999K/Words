@@ -102,6 +102,27 @@
   }
 }
 
+.dark-theme {
+
+  & .ant-modal-content {
+    background-color: var(--first-gray) !important;
+    box-shadow: none !important;
+    color: white;
+  }
+
+  & .ant-modal-header {
+    background-color: var(--first-gray) !important;
+  }
+
+  & .ant-modal-title {
+    color: white !important;
+  }
+
+  .ant-modal-close {
+    color: white !important;
+  }
+}
+
 * {
   scroll-behavior: smooth;
 

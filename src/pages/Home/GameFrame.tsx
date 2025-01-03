@@ -6,6 +6,7 @@ import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { HintModal } from "./HintModal.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -17,7 +18,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
   const { data: user, isLoading: isLoadingUser } = useGetUser();
-  const { mutateAsync: getHint } = useGetHint();
+  const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
+  const [hint, setHint] = useState<null | string>(null);
 
   const handleOk = () => {
     setIsWin(null);
@@ -26,7 +28,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
 
   const handleGetHint = () => {
     getHint().then(result => {
-      console.log("result", result);
+      setHint(result.data.hint);
     });
   };
 
@@ -77,12 +79,16 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   useEffect(() => {
+    console.log("hint", hint);
+  }, [hint]);
+
+  useEffect(() => {
     if (user) {
       setWords(user?.history.map(word => ({ ...word, id: word.guess })));
     }
   }, [user]);
 
-  if (isLoadingUser) return <PageLoader />;
+  if (isLoadingUser || isLoadingHint) return <PageLoader />;
 
   return (
     <>
@@ -120,6 +126,9 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             <p>Ты получил <b>{isWin.pp}</b> pp.</p>
           </Modal>
         )
+      }
+      {
+        !!hint && <HintModal hint={hint} />
       }
     </>
   );
