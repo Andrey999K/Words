@@ -1,26 +1,26 @@
 import { Modal } from "antd";
-import { FC, useContext, useState } from "react";
+import { FC, useContext } from "react";
 import { ThemeContext } from "../../App.tsx";
 
 type HintModalProps = {
-  hint: null | string
+  hint: null | string,
+  onClose: () => void,
 }
 
-export const HintModal: FC<HintModalProps> = ({ hint }) => {
-  const [currentHint, setCurrentHint] = useState<null | string>(hint);
+export const HintModal: FC<HintModalProps> = ({ hint, onClose }) => {
   const theme = useContext(ThemeContext);
 
   const handleOk = () => {
-    setCurrentHint(null);
+    onClose();
   };
 
   const handleCancel = () => {
-    setCurrentHint(null);
+    onClose();
   };
 
 
   return (
-    <Modal title="Подсказка!" open={!!currentHint} onOk={handleOk} onCancel={handleCancel}
+    <Modal title="Подсказка!" open={!!hint} onOk={handleOk} onCancel={handleCancel}
            cancelButtonProps={{ hidden: true }}
            className={theme?.darkTheme ? "dark-theme !shadow-none" : ""}
     >

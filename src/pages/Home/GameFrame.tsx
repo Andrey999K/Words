@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message, Modal, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { useGetHint, useGetUser, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
@@ -7,6 +7,7 @@ import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HintModal } from "./HintModal.tsx";
+import { WinModal } from "./WinModal.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -30,6 +31,10 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     getHint().then(result => {
       setHint(result.data.hint);
     });
+  };
+
+  const clearHint = () => {
+    setHint(null);
   };
 
   const onEnterWord = (value: string) => {
@@ -88,10 +93,11 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     }
   }, [user]);
 
-  if (isLoadingUser || isLoadingHint) return <PageLoader />;
+  if (isLoadingUser) return <PageLoader />;
 
   return (
     <>
+      {isLoadingHint && <PageLoader />}
       <div className="h-screen pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
           <div className="mb-4 flex justify-center items-center gap-3">
@@ -112,7 +118,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           <div className="flex flex-col mt-5 w-full gap-2 max-h-[calc(100vh*0.7)] overflow-auto">
             {
               words.map(word => (
-                <CardWord key={word.id} data={word} />
+                <CardWord key={word.guess} data={word} />
               ))
             }
           </div>
@@ -120,15 +126,11 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       </div>
       {
         !!isWin && (
-          <Modal title="Победа!" open={!!isWin} onOk={handleOk} okText="Новая игра" cancelButtonProps={{ hidden: true }}>
-            <p>Ты угадал, йоу, красава, мээээээээээээээээээээээээээээээн!!!!!!!🤪🤪🤪</p>
-            <p>Загаданное слово <b>{isWin.guess}</b>.</p>
-            <p>Ты получил <b>{isWin.pp}</b> pp.</p>
-          </Modal>
+          <WinModal data={isWin} onOk={handleOk} />
         )
       }
       {
-        !!hint && <HintModal hint={hint} />
+        !!hint && <HintModal hint={hint} onClose={clearHint} />
       }
     </>
   );
