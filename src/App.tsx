@@ -6,6 +6,9 @@ import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Registration } from "./pages/Registration/Page.tsx";
 import { ConfigProvider } from "antd";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { Scoreboard } from "./pages/Scoreboard/Page.tsx";
+import { useGetUser } from "./api/api.ts";
+import { PageLoader } from "./components/PageLoader.tsx";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +16,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: Routes.SCOREBOARD,
+    element: (
+      <ProtectedRoute>
+        <Scoreboard />
       </ProtectedRoute>
     ),
   },
@@ -44,6 +55,9 @@ export const ThemeContext = createContext<undefined | {
 
 export const App = () => {
   const [darkTheme, setDarkTheme] = useState(getDarkTheme());
+  const { data: user, isLoading: isLoadingUser } = useGetUser();
+
+  console.log("App: user", user);
 
   return (
     <div className={darkTheme ? "dark" : ""}>
@@ -57,6 +71,9 @@ export const App = () => {
             },
           }}
         >
+          {
+            isLoadingUser && <PageLoader />
+          }
           <RouterProvider router={router} />
         </ConfigProvider>
       </ThemeContext.Provider>

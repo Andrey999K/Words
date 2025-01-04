@@ -26,7 +26,7 @@ export const keys = {
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  baseURL: window.location.href === "http://front.dev.local:5100/" ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
+  baseURL: window.location.href.startsWith("http://front.dev.local:5100/") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
@@ -74,6 +74,12 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationKey: [keys.registerUser],
     mutationFn: registerUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 
@@ -86,6 +92,12 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 

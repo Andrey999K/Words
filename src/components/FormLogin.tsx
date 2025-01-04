@@ -1,9 +1,10 @@
 import { Button, Card, Form, FormProps, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
-import { useLoginUser } from "../api/api.ts";
+import { keys, queryClient, useLoginUser } from "../api/api.ts";
 import { LoginFields } from "../types";
 import { PageLoader } from "./PageLoader.tsx";
+import { useState } from "react";
 
 const onFinishFailed: FormProps<LoginFields>["onFinishFailed"] = (errorInfo) => {
   console.log("Failed:", errorInfo);
@@ -11,12 +12,14 @@ const onFinishFailed: FormProps<LoginFields>["onFinishFailed"] = (errorInfo) => 
 
 export const FormLogin = () => {
   const { mutateAsync: loginUser, isPending } = useLoginUser();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
     loginUser(values).then(response => {
       if (response.status === "200") {
-        navigate(Routes.HOME);
+        setLoading(true);
+        queryClient.invalidateQueries({ queryKey: [keys.user] }).then(() => navigate(Routes.HOME));
       } else {
         message.error("Неправильный логин или пароль");
       }
@@ -25,7 +28,7 @@ export const FormLogin = () => {
 
   return (
     <>
-      {isPending && <PageLoader />}
+      {(isPending || loading) && <PageLoader />}
       <Card className="p-4 dark:bg-gray-300 ">
         <Form
           name="basic"
