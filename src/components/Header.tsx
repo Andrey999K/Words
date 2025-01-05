@@ -2,7 +2,7 @@ import { useGetUser, useLogoutUser } from "../api/api.ts";
 import { PageLoader } from "./PageLoader.tsx";
 import { Button, Dropdown, MenuProps } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
 import { SwitchTheme } from "./SwitchTheme.tsx";
 import { useContext } from "react";
@@ -22,12 +22,32 @@ export const Header = () => {
   };
 
   const items: MenuProps["items"] = [
-    // {
-    //   key: "1",
-    //   label: <NavLink to={Routes.ME}>Профиль</NavLink>,
-    // },
     {
       key: "1",
+      label: (
+        <NavLink to={Routes.HOME}
+                 className={({ isActive, isPending }) =>
+                   (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
+                 }
+        >
+          Главная
+        </NavLink>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <NavLink to={Routes.SCOREBOARD}
+                 className={({ isActive, isPending }) =>
+                   (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
+                 }
+        >
+          Scoreboard
+        </NavLink>
+      ),
+    },
+    {
+      key: "3",
       label: (
         <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 dark:text-white">
           <span>Тёмная тема</span>
@@ -36,7 +56,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "2",
+      key: "4",
       label: <Button type="primary" onClick={handleExit}>Выход</Button>,
     },
   ];
