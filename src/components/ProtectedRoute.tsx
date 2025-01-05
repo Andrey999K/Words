@@ -7,23 +7,27 @@ import { Header } from "./Header.tsx";
 import { RouteProps } from "../types";
 
 export const ProtectedRoute: FC<RouteProps> = ({ children }) => {
-  const { data: userAuth, isLoading } = useGetUser();
+  const { data: user, isLoading } = useGetUser();
 
   if (isLoading) return <PageLoader />;
-  if (userAuth && "id" in userAuth) {
-    return <div className="h-screen w-full">
-      <Header />
-      <div className="flex h-full justify-center">
-        {children}
+  if (user && "id" in user) {
+    return (
+      <div className="min-h-screen w-full">
+        <Header />
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-screen-lg">
+            {children}
+          </div>
+        </div>
       </div>
-    </div>;
+    );
   }
 
   return <Navigate to={Routes.LOGIN} />;
   // if (
-  //   userAuth &&
-  //   "comment" in userAuth &&
-  //   userAuth.comment === "Non authorized"
+  //   user &&
+  //   "comment" in user &&
+  //   user.comment === "Non authorized"
   // ) {
   //   return <Navigate to={Routes.LOGIN} />;
   // }

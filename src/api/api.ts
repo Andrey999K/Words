@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { Hint, LoginFields, ResponseType, UserData } from "../types";
+import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,11 +22,12 @@ export const keys = {
   sendGuess: "sendGuess",
   logoutUser: "logoutUser",
   hint: "hint",
+  scoreboard: "scoreboard",
 };
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  baseURL: window.location.href === "http://front.dev.local:5100/" ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
+  baseURL: window.location.href.startsWith("http://front.dev.local:5100/") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
@@ -74,6 +75,12 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationKey: [keys.registerUser],
     mutationFn: registerUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 
@@ -86,6 +93,12 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 
@@ -149,5 +162,18 @@ export const useGetHint = () => {
   return useMutation({
     mutationKey: [keys.hint],
     mutationFn: getHint,
+  });
+};
+
+// получение таблицы очков пользователей
+export const getScoreboard = async (): Promise<unknown> => {
+  const response = await customFetch("/game/scoreboard");
+  return response.data.scoreboard;
+};
+
+export const useGetScoreboard = (): UseQueryResult<ScoreboardType[], Error> => {
+  return useQuery({
+    queryKey: [keys.scoreboard],
+    queryFn: getScoreboard,
   });
 };
