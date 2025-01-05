@@ -43,3 +43,8 @@ export type Hint = {
   comment: string,
   hint: string
 }
+
+export type ScoreboardType = {
+  email: string,
+  pp: number
+}

@@ -123,6 +123,34 @@
   }
 }
 
+.dark-theme {
+  
+  &::-webkit-scrollbar-track {
+    background: var(--first-gray); /* цвет зоны отслеживания */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--second-gray); /* цвет бегунка */
+    /*border: 3px solid orange;  !* отступ вокруг бегунка *!*/
+    border-left: 1px solid var(--second-gray);
+    border-right: 1px solid var(--second-gray);
+  }
+
+  & * {
+
+    &::-webkit-scrollbar-track {
+      background: var(--first-gray); /* цвет зоны отслеживания */
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--second-gray); /* цвет бегунка */
+      /*border: 3px solid orange;  !* отступ вокруг бегунка *!*/
+      border-left: 1px solid var(--second-gray);
+      border-right: 1px solid var(--second-gray);
+    }
+  }
+}
+
 * {
   scroll-behavior: smooth;
 

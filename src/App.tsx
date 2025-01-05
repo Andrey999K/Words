@@ -5,7 +5,7 @@ import { Routes } from "./utils/routesConfig.ts";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Registration } from "./pages/Registration/Page.tsx";
 import { ConfigProvider } from "antd";
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Scoreboard } from "./pages/Scoreboard/Page.tsx";
 import { useGetUser } from "./api/api.ts";
 import { PageLoader } from "./components/PageLoader.tsx";
@@ -55,9 +55,17 @@ export const ThemeContext = createContext<undefined | {
 
 export const App = () => {
   const [darkTheme, setDarkTheme] = useState(getDarkTheme());
-  const { data: user, isLoading: isLoadingUser } = useGetUser();
+  const { isLoading: isLoadingUser } = useGetUser();
 
-  console.log("App: user", user);
+  useEffect(() => {
+    const body = document.body;
+    console.log("darkTheme", darkTheme);
+    if (darkTheme) {
+      body.classList.add("dark-theme");
+    } else {
+      body.classList.remove("dark-theme");
+    }
+  }, [darkTheme]);
 
   return (
     <div className={darkTheme ? "dark" : ""}>

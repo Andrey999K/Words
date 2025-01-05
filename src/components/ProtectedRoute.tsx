@@ -9,15 +9,15 @@ import { RouteProps } from "../types";
 export const ProtectedRoute: FC<RouteProps> = ({ children }) => {
   const { data: user, isLoading } = useGetUser();
 
-  console.log("ProtectedRoute: user", user);
-
   if (isLoading) return <PageLoader />;
   if (user && "id" in user) {
     return (
-      <div className="h-screen w-full">
+      <div className="min-h-screen w-full">
         <Header />
-        <div className="flex h-full justify-center">
-          {children}
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-screen-lg">
+            {children}
+          </div>
         </div>
       </div>
     );

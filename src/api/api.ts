@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { Hint, LoginFields, ResponseType, UserData } from "../types";
+import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +22,7 @@ export const keys = {
   sendGuess: "sendGuess",
   logoutUser: "logoutUser",
   hint: "hint",
+  scoreboard: "scoreboard",
 };
 
 axios.defaults.withCredentials = true;
@@ -161,5 +162,18 @@ export const useGetHint = () => {
   return useMutation({
     mutationKey: [keys.hint],
     mutationFn: getHint,
+  });
+};
+
+// получение таблицы очков пользователей
+export const getScoreboard = async (): Promise<unknown> => {
+  const response = await customFetch("/game/scoreboard");
+  return response.data.scoreboard;
+};
+
+export const useGetScoreboard = (): UseQueryResult<ScoreboardType[], Error> => {
+  return useQuery({
+    queryKey: [keys.scoreboard],
+    queryFn: getScoreboard,
   });
 };

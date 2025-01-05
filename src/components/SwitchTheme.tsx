@@ -9,6 +9,8 @@ export const SwitchTheme = () => {
     if (theme?.setDarkTheme) {
       theme.setDarkTheme(checked);
       localStorage.setItem("dark", JSON.stringify(checked));
+      const body = document.querySelector("body")!;
+      body.classList.toggle("dark-theme");
     }
   };
 
