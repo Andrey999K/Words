@@ -12,7 +12,8 @@ export type UserData = {
   history: {
     guess: string, result: string
   }[],
-  id: 20,
+  id: number,
+  pp: number,
   username: string
 }
 

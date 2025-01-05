@@ -25,6 +25,24 @@ export const Header = () => {
     {
       key: "1",
       label: (
+        <div className="text-white w-full flex justify-between gap-3">
+          <span className="font-semibold">Username</span>
+          <span>{user?.username}</span>
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <div className="text-white w-full flex justify-between gap-3">
+          <span className="font-semibold">Pp</span>
+          <span>{user?.pp}</span>
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: (
         <NavLink to={Routes.HOME}
                  className={({ isActive, isPending }) =>
                    (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
@@ -35,7 +53,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "2",
+      key: "4",
       label: (
         <NavLink to={Routes.SCOREBOARD}
                  className={({ isActive, isPending }) =>
@@ -47,7 +65,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "3",
+      key: "5",
       label: (
         <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 dark:text-white">
           <span>Тёмная тема</span>
@@ -56,7 +74,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "4",
+      key: "6",
       label: <Button type="primary" onClick={handleExit}>Выход</Button>,
     },
   ];
