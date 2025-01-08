@@ -28,7 +28,7 @@ export const JoinCode = () => {
   // };
 
   return (
-    <div className="fixed top-40 right-20 z-[9999]">
+    <div className="fixed top-24 md:right-20 z-[9999]">
       <Input
         ref={inputRef}
         value={`${window.location.origin}?code=${user?.join_code}`}
@@ -38,8 +38,8 @@ export const JoinCode = () => {
       />
       <Button
         onClick={handleCopy}
-        style={{ marginLeft: 8 }}
         type="primary"
+        className="text-xs md:text-sm"
       >
         {buttonText}
       </Button>

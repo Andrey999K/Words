@@ -8,7 +8,7 @@ import { PageLoader } from "../../components/PageLoader.tsx";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HintModal } from "../../components/HintModal.tsx";
 import { WinModal } from "./WinModal.tsx";
-import { JoinCode } from "../GamePage/JoinCode.tsx";
+import { JoinCode } from "./JoinCode.tsx";
 import { useSearchParams } from "react-router-dom";
 
 type GameFrameProps = {
