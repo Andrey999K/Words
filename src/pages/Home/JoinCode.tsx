@@ -1,18 +1,38 @@
 import { useGetUser } from "../../api/api.ts";
-import { Button, Input } from "antd";
+import { Button, Input, InputRef } from "antd";
 import { useRef, useState } from "react";
+
+const linkTexts = [
+  "Пригласить игроков",
+  "Ссылка скопирована!",
+  "Дважды скопирована!",
+  "Трижды скопирована!",
+  "Мегаскопировано!",
+  "Киберскопировано!",
+  "Экстраскопировано!",
+  "Суперскопировано!",
+  "Супермегаскопировано!",
+  "Суперкибермегаскопировано!",
+  "ДА ВАЩЕ ИМБА!!!!!!!🔥🔥🔥",
+];
 
 export const JoinCode = () => {
   const { data: user } = useGetUser();
-  const [buttonText, setButtonText] = useState("Скопировать ссылку для присоединения игроков");
+  const [countCopyed, setCountCopyed] = useState(0);
 
-  const inputRef = useRef<HTMLInputElement | null>();
+  const inputRef = useRef<InputRef>(null);
 
   const handleCopy = () => {
     if (inputRef) {
       inputRef.current?.select();
       document.execCommand("copy");
-      setButtonText("Cкопировано!");
+      setCountCopyed(prevState => {
+        if (prevState === linkTexts.length - 1) {
+          return 1;
+        } else {
+          return prevState + 1;
+        }
+      });
     }
   };
 
@@ -28,7 +48,7 @@ export const JoinCode = () => {
   // };
 
   return (
-    <div className="fixed top-24 md:right-20 z-[9999]">
+    <div>
       <Input
         ref={inputRef}
         value={`${window.location.origin}?code=${user?.join_code}`}
@@ -39,9 +59,9 @@ export const JoinCode = () => {
       <Button
         onClick={handleCopy}
         type="primary"
-        className="text-xs md:text-sm"
+        className={`text-sm !lg:text-sm ${countCopyed === linkTexts.length - 1 ? "!bg-red-600" : ""}`}
       >
-        {buttonText}
+        {linkTexts[countCopyed]}
       </Button>
     </div>
   );

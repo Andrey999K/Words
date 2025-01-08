@@ -106,8 +106,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     <>
       {isLoadingHint && <PageLoader />}
       <div className="h-screen pt-40 w-full flex flex-col items-center">
-        <JoinCode />
+        <div className="fixed top-[13ch] hidden bs:block right-[calc(50%-420px)] z-[9999]">
+          <JoinCode />
+        </div>
         <div className="w-full max-w-[60ch]">
+          <div className="flex justify-center mb-4">
+            <JoinCode />
+          </div>
           <div className="mb-4 flex justify-center items-center gap-3">
             <Button type="primary" onClick={handleOk}>Новая игра</Button>
             <div className="flex gap-2 items-center">
