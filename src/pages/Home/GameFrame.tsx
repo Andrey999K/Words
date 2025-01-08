@@ -110,7 +110,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           <JoinCode />
         </div>
         <div className="w-full max-w-[60ch]">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-4 bs:hidden">
             <JoinCode />
           </div>
           <div className="mb-4 flex justify-center items-center gap-3">

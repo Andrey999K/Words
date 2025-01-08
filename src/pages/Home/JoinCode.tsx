@@ -22,9 +22,13 @@ export const JoinCode = () => {
 
   const inputRef = useRef<InputRef>(null);
 
-  const handleCopy = () => {
-    if (inputRef) {
-      inputRef.current?.select();
+  const unsecuredCopyToClipboard = () => {
+    const textArea = document.createElement("textarea");
+    textArea.value = `${window.location.origin}?code=${user?.join_code}`;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
       document.execCommand("copy");
       setCountCopyed(prevState => {
         if (prevState === linkTexts.length - 1) {
@@ -33,8 +37,44 @@ export const JoinCode = () => {
           return prevState + 1;
         }
       });
+    } catch (err) {
+      console.error("Unable to copy to clipboard", err);
     }
+    document.body.removeChild(textArea);
   };
+
+  // const handleCopy = async () => {
+  //   if (inputRef) {
+  //     inputRef.current?.focus();
+  //     inputRef.current?.select();
+  //     try {
+  //       document.execCommand("copy");
+  //     } catch (err) {
+  //       console.error("Unable to copy to clipboard", err);
+  //     }
+  //     setCountCopyed(prevState => {
+  //       if (prevState === linkTexts.length - 1) {
+  //         return 1;
+  //       } else {
+  //         return prevState + 1;
+  //       }
+  //     });
+  //   }
+  // const textToCopy = `${window.location.origin}?code=${user?.join_code}`;
+  //
+  // try {
+  //   await navigator.clipboard.writeText(textToCopy);
+  //   setCountCopyed(prevState => {
+  //     if (prevState === linkTexts.length - 1) {
+  //       return 1;
+  //     } else {
+  //       return prevState + 1;
+  //     }
+  //   });
+  // } catch (err) {
+  //   console.error("Ошибка при копировании текста: ", err);
+  // }
+  // };
 
   // const textToCopy = "Текст, который нужно скопировать";
   //
@@ -57,7 +97,7 @@ export const JoinCode = () => {
         className="hidden"
       />
       <Button
-        onClick={handleCopy}
+        onClick={unsecuredCopyToClipboard}
         type="primary"
         className={`text-sm !lg:text-sm ${countCopyed === linkTexts.length - 1 ? "!bg-red-600" : ""}`}
       >
