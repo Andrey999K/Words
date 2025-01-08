@@ -13,6 +13,7 @@ export type UserData = {
     guess: string, result: string
   }[],
   id: number,
+  join_code: string,
   pp: number,
   username: string
 }
