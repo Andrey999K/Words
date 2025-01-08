@@ -9,6 +9,7 @@ import { createContext, Dispatch, SetStateAction, useEffect, useState } from "re
 import { Scoreboard } from "./pages/Scoreboard/Page.tsx";
 import { useGetUser } from "./api/api.ts";
 import { PageLoader } from "./components/PageLoader.tsx";
+import { GamePage } from "./pages/GamePage/Page.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Scoreboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "game/:gameId",
+    element: (
+      <ProtectedRoute>
+        <GamePage />
       </ProtectedRoute>
     ),
   },

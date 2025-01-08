@@ -34,8 +34,8 @@
 
   & .ant-card, & .ant-dropdown.ant-dropdown-menu {
     color: white;
-    background: var(--first-gray) !important;
-    border-color: var(--second-gray) !important;
+    background: var(--first-gray);
+    border-color: var(--second-gray);
   }
 
   & .card-word.red {
@@ -124,7 +124,7 @@
 }
 
 .dark-theme {
-  
+
   &::-webkit-scrollbar-track {
     background: var(--first-gray); /* цвет зоны отслеживания */
   }

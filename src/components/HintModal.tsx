@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import { FC, useContext } from "react";
-import { ThemeContext } from "../../App.tsx";
+import { ThemeContext } from "../App.tsx";
 
 type HintModalProps = {
   hint: null | string,

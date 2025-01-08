@@ -6,32 +6,21 @@ import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { WinModal } from "../Home/WinModal.tsx";
 import { HintModal } from "../../components/HintModal.tsx";
-import { WinModal } from "./WinModal.tsx";
-import { JoinCode } from "../GamePage/JoinCode.tsx";
-import { useSearchParams } from "react-router-dom";
+import { mockData } from "./mockData.ts";
 
-type GameFrameProps = {
-  onMoveMain: () => void
-}
-
-export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
+export const MultiGameFrame: FC = () => {
   const { mutateAsync: enterWord } = useSendGuess();
-  const [words, setWords] = useState<Guess[]>([]);
+  const [words, setWords] = useState<Guess[]>(mockData);
   const [isWin, setIsWin] = useState<null | Guess>(null);
-  const [currentWord, setCurrentWord] = useState<null | Guess>(null);
-  const { data: user, isLoading: isLoadingUser } = useGetUser();
+  const [currentWord, setCurrentWord] = useState<null | (Guess & { user: "red" | "blue" })>(null);
+  const { isLoading: isLoadingUser } = useGetUser();
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
   const [hint, setHint] = useState<null | string>(null);
 
-  const [searchParams] = useSearchParams();
-  const code = searchParams.get("code");
-  console.log("code", code);
-
-
   const handleOk = () => {
     setIsWin(null);
-    onMoveMain();
   };
 
   const handleGetHint = () => {
@@ -91,22 +80,21 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   useEffect(() => {
-    console.log("hint", hint);
-  }, [hint]);
+    console.log("words", words);
+  }, [words]);
 
-  useEffect(() => {
-    if (user) {
-      setWords(user?.history.map(word => ({ ...word, id: word.guess })));
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setWords(user?.history.map(word => ({ ...word, id: word.guess })));
+  //   }
+  // }, [user]);
 
   if (isLoadingUser) return <PageLoader />;
 
   return (
     <>
       {isLoadingHint && <PageLoader />}
-      <div className="h-screen pt-40 w-full flex flex-col items-center">
-        <JoinCode />
+      <div className="pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
           <div className="mb-4 flex justify-center items-center gap-3">
             <Button type="primary" onClick={handleOk}>Новая игра</Button>
