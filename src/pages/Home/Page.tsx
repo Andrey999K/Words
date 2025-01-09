@@ -16,8 +16,6 @@ export const Home = () => {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
 
-  console.log("heartbeat", heartbeat);
-
   const onStartGame = (value: boolean) => {
     setStartGame(value);
   };
