@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, message, Tooltip } from "antd";
-import { useGetHint, useGetUser, useJoinGame, useSendGuess } from "../../api/api.ts";
+import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -9,8 +9,6 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HintModal } from "../../components/HintModal.tsx";
 import { WinModal } from "./WinModal.tsx";
 import { JoinCode } from "./JoinCode.tsx";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Routes } from "../../utils/routesConfig.ts";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -18,17 +16,13 @@ type GameFrameProps = {
 
 export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: enterWord } = useSendGuess();
-  const { mutateAsync: joinGame } = useJoinGame();
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
-  const { data: user, isLoading: isLoadingUser } = useGetUser();
+  const { isLoading: isLoadingUser } = useGetUser();
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
+  const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
-  const code = searchParams.get("code");
 
   const handleOk = () => {
     setIsWin(null);
@@ -92,18 +86,10 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   useEffect(() => {
-    if (code) {
-      joinGame(code).then(() => {
-        navigate(Routes.HOME);
-      });
+    if (heartbeat) {
+      setWords(heartbeat?.megaHistory.map(word => ({ ...word, id: word.guess })));
     }
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      setWords(user?.history.map(word => ({ ...word, id: word.guess })));
-    }
-  }, [user]);
+  }, [heartbeat]);
 
   if (isLoadingUser) return <PageLoader />;
 

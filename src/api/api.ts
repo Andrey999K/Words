@@ -2,7 +2,7 @@ import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/re
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
 import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
-import { JoinGameResponse } from "./types.ts";
+import { HeartbeatResponse, JoinGameResponse } from "./types.ts";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +25,7 @@ export const keys = {
   hint: "hint",
   scoreboard: "scoreboard",
   join: "join",
+  heartbeat: "getHeartbeat",
 };
 
 axios.defaults.withCredentials = true;
@@ -191,5 +192,19 @@ export const useJoinGame = () => {
   return useMutation({
     mutationKey: [keys.join],
     mutationFn: joinGame,
+  });
+};
+
+// получение состояния игры
+export const getHeartbeat = async (): Promise<ResponseType<HeartbeatResponse>> => {
+  const response = await customFetch("/game/heartbeat");
+  return response.data;
+};
+
+export const useHeartbeat = (): UseQueryResult<HeartbeatResponse, Error> => {
+  return useQuery({
+    queryKey: [keys.heartbeat],
+    queryFn: getHeartbeat,
+    refetchInterval: 1000,
   });
 };

@@ -35,6 +35,7 @@ export type Guess = {
   guess: string,
   result: string,
   pp?: number
+  player_num?: number
 }
 
 export type RouteProps = {
