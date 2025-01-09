@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, message, Tooltip } from "antd";
-import { useGetHint, useGetUser, useSendGuess } from "../../api/api.ts";
+import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -19,8 +19,9 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
-  const { data: user, isLoading: isLoadingUser } = useGetUser();
+  const { isLoading: isLoadingUser } = useGetUser();
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
+  const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
 
   const handleOk = () => {
@@ -85,10 +86,10 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   useEffect(() => {
-    if (user) {
-      setWords(user?.history.map(word => ({ ...word, id: word.guess })));
+    if (heartbeat) {
+      setWords(heartbeat?.megaHistory.map(word => ({ ...word, id: word.guess })));
     }
-  }, [user]);
+  }, [heartbeat]);
 
   if (isLoadingUser) return <PageLoader />;
 

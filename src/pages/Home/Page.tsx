@@ -1,17 +1,20 @@
 import { StartFrame } from "./StartFrame.tsx";
 import { useEffect, useState } from "react";
 import { GameFrame } from "./GameFrame.tsx";
-import { useGetUser, useJoinGame } from "../../api/api.ts";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useGetUser, useHeartbeat, useJoinGame } from "../../api/api.ts";
+import { PageLoader } from "../../components/PageLoader.tsx";
 import { Routes } from "../../utils/routesConfig.ts";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Home = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
-  const { data: user } = useGetUser();
+  const { isLoading } = useGetUser();
   const { mutateAsync: joinGame } = useJoinGame();
+  const { data: heartbeat } = useHeartbeat();
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
-  const navigate = useNavigate();
 
   const onStartGame = (value: boolean) => {
     setStartGame(value);
@@ -22,6 +25,12 @@ export const Home = () => {
   };
 
   useEffect(() => {
+    if (heartbeat && heartbeat.gamers.length !== 0) {
+      setStartGame(true);
+    }
+  }, [heartbeat]);
+
+  useEffect(() => {
     if (code) {
       joinGame(code).then(() => {
         navigate(Routes.HOME);
@@ -29,11 +38,7 @@ export const Home = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user?.history.length !== 0) {
-      setStartGame(true);
-    }
-  }, [user]);
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
