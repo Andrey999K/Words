@@ -2,6 +2,7 @@ import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/re
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
 import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
+import { JoinGameResponse } from "./types.ts";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,7 @@ export const keys = {
   logoutUser: "logoutUser",
   hint: "hint",
   scoreboard: "scoreboard",
+  join: "join",
 };
 
 axios.defaults.withCredentials = true;
@@ -175,5 +177,19 @@ export const useGetScoreboard = (): UseQueryResult<ScoreboardType[], Error> => {
   return useQuery({
     queryKey: [keys.scoreboard],
     queryFn: getScoreboard,
+  });
+};
+
+// присоединение к игре
+const joinGame = async (joinCode: string): Promise<ResponseType<JoinGameResponse>> => {
+  return customFetch("/game/join", "POST", {
+    joinCode,
+  });
+};
+
+export const useJoinGame = () => {
+  return useMutation({
+    mutationKey: [keys.join],
+    mutationFn: joinGame,
   });
 };
