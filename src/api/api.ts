@@ -191,5 +191,11 @@ export const useJoinGame = () => {
   return useMutation({
     mutationKey: [keys.join],
     mutationFn: joinGame,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
