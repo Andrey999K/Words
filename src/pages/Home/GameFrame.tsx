@@ -40,6 +40,11 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   const onEnterWord = (value: string) => {
+    const findedWord = words.find(word => word.guess === value);
+    if (findedWord) {
+      message.info(`Это слово уже было введено. Его номер ${findedWord.result}`);
+      return;
+    }
     enterWord(value).then(result => {
       const guess = result.data;
       if (guess.result === "not a word") {
@@ -61,7 +66,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
         setCurrentWord(newGuess);
         if (guess.result.startsWith(">")) {
           if (words.find(word => word.result === guess.guess)) {
-            message.error("Это слово ты уже вводил");
+            message.info(`Это слово ты уже вводил. Его номер ${guess.result}`);
             return;
           }
           setWords([...words, newGuess]);
@@ -80,7 +85,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
         });
         setWords(newMass);
       } else {
-        message.error("Это слово уже было введено");
+        message.info(`Это слово уже было введено. Его номер ${guess.result}`);
       }
     });
   };
