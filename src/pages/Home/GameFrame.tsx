@@ -38,6 +38,24 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const clearHint = () => {
     setHint(null);
   };
+  
+  const showMessageWithButton = () => {
+    message.info({
+      content: (
+        <div className="flex flex-col gap-1 items-start">
+          <p>Такого слова нет.</p>
+          <p>Это ошибка?</p>
+          <Button type="primary" onClick={() => {
+            message.destroy();
+            message.success("Заявка на добавление слова успешно отправлена!");
+          }}>
+            Да
+          </Button>
+        </div>
+      ),
+      duration: 0,
+    });
+  };
 
   const onEnterWord = (value: string) => {
     const findedWord = words.find(word => word.guess === value);
@@ -49,7 +67,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       const guess = result.data;
       if (guess.result === "not a word") {
         console.log("not a word");
-        message.error("Такого слова нет");
+        showMessageWithButton();
+        // message.error("Такого слова нет");
         return;
       }
       const newGuess = {
