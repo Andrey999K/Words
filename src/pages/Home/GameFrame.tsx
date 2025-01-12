@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, message } from "antd";
-import { useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
+import { useGameStop, useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -24,10 +24,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
   const { mutateAsync: addNewWord } = useNewWord();
+  const { mutateAsync: gameStop, isPending: isLoadingGameStop } = useGameStop();
 
   const handleOk = () => {
     setIsWin(null);
-    onMoveMain();
+    gameStop().then(() => {
+      onMoveMain();
+    });
   };
 
   const handleGetHint = () => {
@@ -119,7 +122,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     }
   }, [heartbeat]);
 
-  if (isLoadingUser) return <PageLoader />;
+  if (isLoadingUser && isLoadingGameStop) return <PageLoader />;
 
   return (
     <>

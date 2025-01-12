@@ -12,7 +12,6 @@ const colors = ["red", "blue", "stone", "green", "orange", "yellow", "fuchsia", 
 export const CardWord: FC<CardWordProps> = ({ data }) => {
   const { data: heartbeat } = useHeartbeat();
   const countGamers = heartbeat?.gamers.length || 0;
-  console.log("data", data);
 
   const colorCard = (result: Guess) => {
     // if ("user" in data) {
