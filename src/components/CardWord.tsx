@@ -7,11 +7,22 @@ type CardWordProps = {
   data: Guess
 }
 
-const colors = ["red", "blue", "stone", "green", "orange", "yellow", "fuchsia", "black"];
+const colors = [
+  "!bg-red-500 !border-red-600",
+  "!bg-blue-500 !border-blue-600",
+  "!bg-stone-500 !border-stone-600",
+  "!bg-green-500 !border-green-600",
+  "!bg-orange-500 !border-orange-600",
+  "!bg-yellow-500 !border-yellow-600",
+  "!bg-fuchsia-500 !border-fuchsia-600",
+  "!bg-black-500 !border-black-600",
+];
 
 export const CardWord: FC<CardWordProps> = ({ data }) => {
   const { data: heartbeat } = useHeartbeat();
   const countGamers = heartbeat?.gamers.length || 0;
+
+  // const currentColors = colors.map(color => `!bg-${color}-500 !border-${color}-600`);
 
   const colorCard = (result: Guess) => {
     // if ("user" in data) {
@@ -19,14 +30,14 @@ export const CardWord: FC<CardWordProps> = ({ data }) => {
     //   // return `!bg-${data.user}-500`;
     // }
 
+    console.log("result: ", countGamers, data, data.player_num);
+
     if (countGamers > 1 && data && data.player_num !== undefined) {
       if (Number(data.player_num) > colors.length) {
-        console.log("1111");
         return "!bg-yellow-900";
       }
-      console.log("2222");
-      console.log(data.player_num);
-      return `!bg-${colors[data.player_num]}-500 !border-${colors[data.player_num]}-600`;
+      // const color = `!bg-${colors[data.player_num]}-500 !border-${colors[data.player_num]}-600`;
+      return colors[data.player_num];
     }
 
     const res = Number(result.result);
@@ -36,7 +47,7 @@ export const CardWord: FC<CardWordProps> = ({ data }) => {
   };
 
   return (
-    <Card className={` ${colorCard(data)} border-2 card-word`}>
+    <Card className={`${colorCard(data)} border-2 card-word`}>
       <div className="flex justify-between w-full items-center">
         <span>{data.guess}</span>
         <span>{data.result}</span>
