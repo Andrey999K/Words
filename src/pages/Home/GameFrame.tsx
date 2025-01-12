@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message, Tooltip } from "antd";
-import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
+import { Button, message } from "antd";
+import { useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HintModal } from "../../components/HintModal.tsx";
 import { WinModal } from "./WinModal.tsx";
 import { JoinCode } from "./JoinCode.tsx";
+import { Hint } from "../../components/Hint.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -23,6 +23,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
   const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
+  const { mutateAsync: addNewWord } = useNewWord();
 
   const handleOk = () => {
     setIsWin(null);
@@ -39,6 +40,24 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     setHint(null);
   };
 
+  const showMessageWithButton = (word: string) => {
+    message.info({
+      content: (
+        <div className="flex flex-col gap-1 items-start">
+          <p>Такого слова нет.</p>
+          <p>Это ошибка?</p>
+          <Button type="primary" className="!p-1 w-full" onClick={() => {
+            message.destroy();
+            addNewWord(word).then(() => message.success("Заявка на добавление слова успешно отправлена!"));
+          }}>
+            Да
+          </Button>
+        </div>
+      ),
+      duration: 0,
+    });
+  };
+
   const onEnterWord = (value: string) => {
     const findedWord = words.find(word => word.guess === value);
     if (findedWord) {
@@ -49,7 +68,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       const guess = result.data;
       if (guess.result === "not a word") {
         console.log("not a word");
-        message.error("Такого слова нет");
+        showMessageWithButton(guess.guess);
+        // message.error("Такого слова нет");
         return;
       }
       const newGuess = {
@@ -102,21 +122,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     <>
       {isLoadingHint && <PageLoader />}
       <div className="h-screen pt-40 w-full flex flex-col items-center">
-        <div className="fixed top-[13ch] hidden bs:block right-[calc(50%-420px)] z-[9999]">
-          <JoinCode />
-        </div>
         <div className="w-full max-w-[60ch]">
-          <div className="flex justify-center mb-4 bs:hidden">
+          <div className="flex justify-center mb-4">
             <JoinCode />
           </div>
           <div className="mb-4 flex justify-center items-center gap-3">
             <Button type="primary" onClick={handleOk}>Новая игра</Button>
-            <div className="flex gap-2 items-center">
-              <Button type="primary" onClick={handleGetHint}>Подсказка</Button>
-              <Tooltip title="Каждое использование подсказки уменьшает количество очков в 2 раза!">
-                <QuestionCircleOutlined className="dark:text-white cursor-pointer" />
-              </Tooltip>
-            </div>
+            <Hint onGetHint={handleGetHint} />
           </div>
           <MainInput onEnter={onEnterWord} />
           {currentWord && (

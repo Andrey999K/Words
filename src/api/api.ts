@@ -26,6 +26,7 @@ export const keys = {
   scoreboard: "scoreboard",
   join: "join",
   heartbeat: "getHeartbeat",
+  newWord: "newWord",
 };
 
 axios.defaults.withCredentials = true;
@@ -212,5 +213,19 @@ export const useHeartbeat = (): UseQueryResult<HeartbeatResponse, Error> => {
     queryKey: [keys.heartbeat],
     queryFn: getHeartbeat,
     refetchInterval: 1000,
+  });
+};
+
+// добавление нового слова
+const addNewWord = async (newWord: string): Promise<ResponseType<JoinGameResponse>> => {
+  return customFetch("/game/missing", "POST", {
+    newWord,
+  });
+};
+
+export const useNewWord = () => {
+  return useMutation({
+    mutationKey: [keys.newWord],
+    mutationFn: addNewWord,
   });
 };
