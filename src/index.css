@@ -144,6 +144,11 @@
       color: white !important;
     }
   }
+
+  .ant-message-notice-content {
+    background: var(--first-gray) !important;
+    color: white !important;
+  }
 }
 
 .dark-theme {

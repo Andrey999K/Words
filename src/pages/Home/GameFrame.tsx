@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, message } from "antd";
-import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
+import { useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -23,6 +23,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
   const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
+  const { mutateAsync: addNewWord } = useNewWord();
 
   const handleOk = () => {
     setIsWin(null);
@@ -38,16 +39,16 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const clearHint = () => {
     setHint(null);
   };
-  
-  const showMessageWithButton = () => {
+
+  const showMessageWithButton = (word: string) => {
     message.info({
       content: (
         <div className="flex flex-col gap-1 items-start">
           <p>Такого слова нет.</p>
           <p>Это ошибка?</p>
-          <Button type="primary" onClick={() => {
+          <Button type="primary" className="!p-1 w-full" onClick={() => {
             message.destroy();
-            message.success("Заявка на добавление слова успешно отправлена!");
+            addNewWord(word).then(() => message.success("Заявка на добавление слова успешно отправлена!"));
           }}>
             Да
           </Button>
@@ -67,7 +68,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       const guess = result.data;
       if (guess.result === "not a word") {
         console.log("not a word");
-        showMessageWithButton();
+        showMessageWithButton(guess.guess);
         // message.error("Такого слова нет");
         return;
       }
