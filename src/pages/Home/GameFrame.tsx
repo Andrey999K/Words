@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message, Popconfirm, Tooltip } from "antd";
+import { Button, message } from "antd";
 import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HintModal } from "../../components/HintModal.tsx";
 import { WinModal } from "./WinModal.tsx";
 import { JoinCode } from "./JoinCode.tsx";
+import { Hint } from "../../components/Hint.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -102,28 +102,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     <>
       {isLoadingHint && <PageLoader />}
       <div className="h-screen pt-40 w-full flex flex-col items-center">
-        <div className="fixed top-[13ch] hidden bs:block right-[calc(50%-420px)] z-[9999]">
-          <JoinCode />
-        </div>
         <div className="w-full max-w-[60ch]">
-          <div className="flex justify-center mb-4 bs:hidden">
+          <div className="flex justify-center mb-4">
             <JoinCode />
           </div>
           <div className="mb-4 flex justify-center items-center gap-3">
             <Button type="primary" onClick={handleOk}>Новая игра</Button>
-            <div className="flex gap-2 items-center">
-              <Popconfirm
-                title="Использовать подсказку?"
-                onConfirm={handleGetHint}
-                okText="Да"
-                cancelText="Нет"
-              >
-                <Button type="primary">Подсказка</Button>
-              </Popconfirm>
-              <Tooltip title="Каждое использование подсказки уменьшает количество очков в 2 раза!">
-                <QuestionCircleOutlined className="dark:text-white cursor-pointer" />
-              </Tooltip>
-            </div>
+            <Hint onGetHint={handleGetHint} />
           </div>
           <MainInput onEnter={onEnterWord} />
           {currentWord && (
