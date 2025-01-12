@@ -64,55 +64,57 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       message.info(`Это слово уже было введено. Его номер ${findedWord.result}`);
       return;
     }
-    enterWord(value).then(result => {
-      const guess = result.data;
-      if (guess.result === "not a word") {
-        console.log("not a word");
-        showMessageWithButton(guess.guess);
-        // message.error("Такого слова нет");
-        return;
-      }
-      const newGuess = {
-        id: String(words.length !== 0 ? words[words.length - 1].id : 1),
-        guess: guess.guess,
-        result: guess.result,
-        pp: guess.pp,
-      };
-      if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
-        setIsWin(newGuess);
-        return;
-      }
-      if (!words.find(word => word.guess === guess.guess)) {
-        setCurrentWord(newGuess);
-        if (guess.result.startsWith(">")) {
-          if (words.find(word => word.result === guess.guess)) {
-            message.info(`Это слово ты уже вводил. Его номер ${guess.result}`);
-            return;
-          }
-          setWords([...words, newGuess]);
+    enterWord(value)
+      .then(result => {
+        const guess = result.data;
+        if (guess.result === "not a word") {
+          console.log("not a word");
+          showMessageWithButton(guess.guess);
+          // message.error("Такого слова нет");
           return;
         }
-        const newMass = [...words.filter(word => !word.result.startsWith(">")), newGuess, ...words.filter(word => word.result.startsWith(">"))].sort((a, b) => {
-          const numberA = Number(a.result);
-          const numberB = Number(b.result);
-          if (numberA < numberB) {
-            return -1;
-          } else if (numberA > numberB) {
-            return 1;
-          } else {
-            return 0;
+        const newGuess = {
+          id: String(words.length !== 0 ? words[words.length - 1].id : 1),
+          guess: guess.guess,
+          result: guess.result,
+          pp: guess.pp,
+        };
+        if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
+          setIsWin(newGuess);
+          return;
+        }
+        if (!words.find(word => word.guess === guess.guess)) {
+          setCurrentWord(newGuess);
+          if (guess.result.startsWith(">")) {
+            if (words.find(word => word.result === guess.guess)) {
+              message.info(`Это слово ты уже вводил. Его номер ${guess.result}`);
+              return;
+            }
+            setWords([...words, newGuess]);
+            return;
           }
-        });
-        setWords(newMass);
-      } else {
-        message.info(`Это слово уже было введено. Его номер ${guess.result}`);
-      }
-    });
+          const newMass = [...words.filter(word => !word.result.startsWith(">")), newGuess, ...words.filter(word => word.result.startsWith(">"))].sort((a, b) => {
+            const numberA = Number(a.result);
+            const numberB = Number(b.result);
+            if (numberA < numberB) {
+              return -1;
+            } else if (numberA > numberB) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+          setWords(newMass);
+        } else {
+          message.info(`Это слово уже было введено. Его номер ${guess.result}`);
+        }
+      })
+      .catch(() => message.error("Произошла непредвиденная ошибка!"));
   };
 
   useEffect(() => {
     if (heartbeat) {
-      setWords(heartbeat?.megaHistory.map(word => ({ ...word, id: word.guess })));
+      setWords(heartbeat?.mega_history.map(word => ({ ...word, id: word.guess })));
     }
   }, [heartbeat]);
 

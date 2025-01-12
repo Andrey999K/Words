@@ -8,7 +8,7 @@ export type ResponseData = {
 export type UserData = {
   comment: string,
   email: string,
-  hasPass: boolean,
+  has_pass: boolean,
   history: {
     guess: string, result: string
   }[],

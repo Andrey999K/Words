@@ -25,7 +25,7 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (heartbeat && heartbeat.gamers.length !== 0) {
+    if (heartbeat && heartbeat.game_id !== -1) {
       setStartGame(true);
     }
   }, [heartbeat]);

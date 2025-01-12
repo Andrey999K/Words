@@ -6,9 +6,10 @@ export type JoinGameResponse = {
 
 export type HeartbeatResponse = {
   comment: string,
-  currentPlayer: number,
+  current_player: number,
   gamers: HeartbeatUser[],
-  megaHistory: MegaHistoryWord[]
+  mega_history: MegaHistoryWord[],
+  game_id: number,
 }
 
 export type HeartbeatUser = {
