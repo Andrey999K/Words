@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message, Tooltip } from "antd";
+import { Button, message, Popconfirm, Tooltip } from "antd";
 import { useGetHint, useGetUser, useHeartbeat, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
@@ -112,7 +112,14 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           <div className="mb-4 flex justify-center items-center gap-3">
             <Button type="primary" onClick={handleOk}>Новая игра</Button>
             <div className="flex gap-2 items-center">
-              <Button type="primary" onClick={handleGetHint}>Подсказка</Button>
+              <Popconfirm
+                title="Использовать подсказку?"
+                onConfirm={handleGetHint}
+                okText="Да"
+                cancelText="Нет"
+              >
+                <Button type="primary">Подсказка</Button>
+              </Popconfirm>
               <Tooltip title="Каждое использование подсказки уменьшает количество очков в 2 раза!">
                 <QuestionCircleOutlined className="dark:text-white cursor-pointer" />
               </Tooltip>

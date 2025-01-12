@@ -121,6 +121,21 @@
   .ant-modal-close {
     color: white !important;
   }
+
+  .ant-popover-inner, .ant-popover-arrow::before {
+    background: var(--second-gray);
+  }
+
+  .ant-btn-variant-outlined {
+    background: var(--first-gray);
+    color: white;
+    border-color: var(--second-gray);
+
+    &:hover {
+      background: green !important;
+      color: white !important;
+    }
+  }
 }
 
 .dark-theme {
