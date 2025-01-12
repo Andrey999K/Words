@@ -9,9 +9,6 @@ module.exports = {
         "second-gray": "#5e5d5d",
       },
     },
-    screens: {
-      "bs": "1920px", // Ваш новый экран
-    },
   },
   plugins: [],
 };
