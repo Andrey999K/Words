@@ -41,9 +41,9 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   const showMessageWithButton = (word: string) => {
-    message.info({
+    message.open({
       content: (
-        <div className="flex flex-col gap-1 items-start">
+        <div className="flex flex-col gap-1 items-center">
           <p>Такого слова нет.</p>
           <p>Это ошибка?</p>
           <Button type="primary" className="!p-1 w-full" onClick={() => {
@@ -54,7 +54,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           </Button>
         </div>
       ),
-      duration: 0,
+      duration: 4,
+      icon: false,
     });
   };
 

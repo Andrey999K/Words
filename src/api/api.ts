@@ -2,7 +2,7 @@ import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/re
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
 import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
-import { HeartbeatResponse, JoinGameResponse } from "./types.ts";
+import { HeartbeatResponse, JoinGameResponse, NewWordResponse } from "./types.ts";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +27,7 @@ export const keys = {
   join: "join",
   heartbeat: "getHeartbeat",
   newWord: "newWord",
+  gameStop: "gameStop",
 };
 
 axios.defaults.withCredentials = true;
@@ -217,7 +218,7 @@ export const useHeartbeat = (): UseQueryResult<HeartbeatResponse, Error> => {
 };
 
 // добавление нового слова
-const addNewWord = async (newWord: string): Promise<ResponseType<JoinGameResponse>> => {
+const addNewWord = async (newWord: string): Promise<ResponseType<NewWordResponse>> => {
   return customFetch("/game/missing", "POST", {
     newWord,
   });
@@ -227,5 +228,17 @@ export const useNewWord = () => {
   return useMutation({
     mutationKey: [keys.newWord],
     mutationFn: addNewWord,
+  });
+};
+
+// остановка игры
+const gameStop = async (): Promise<ResponseType<any>> => {
+  return customFetch("/game/stop", "POST");
+};
+
+export const useGameStop = () => {
+  return useMutation({
+    mutationKey: [keys.gameStop],
+    mutationFn: gameStop,
   });
 };

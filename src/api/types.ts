@@ -30,3 +30,8 @@ export type MegaHistoryWord = {
   player_num: number,
   result: string
 }
+
+export type NewWordResponse = {
+  comment: string,
+  newWord: string
+}

@@ -24,10 +24,6 @@
   padding: 4px !important;
 }
 
-.ant-message-custom-content {
-  align-items: start !important;
-}
-
 .ant-message-info span.anticon {
   margin-top: 5px;
 }
