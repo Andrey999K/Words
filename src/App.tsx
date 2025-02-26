@@ -74,7 +74,7 @@ export const App = () => {
   }, [darkTheme]);
 
   return (
-    <div className={darkTheme ? "dark" : ""}>
+    <div className={`${darkTheme ? "dark" : ""} w-full h-full`}>
       <ThemeContext.Provider value={{
         darkTheme, setDarkTheme,
       }}>
