@@ -72,9 +72,11 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       .then(result => {
         const guess = result.data;
         if (guess.result === "not a word") {
-          console.log("not a word");
           showMessageWithButton(guess.guess);
           // message.error("Такого слова нет");
+          return;
+        } else if (guess.result === "not your turn!") {
+          message.error("Сейчас не твой ход.");
           return;
         }
         const newGuess = {
@@ -83,7 +85,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           result: guess.result,
           pp: guess.pp,
         };
-        if (guess.result === "win!") { // "win!" "not a word" ">10000" "123"
+        if (guess.result === "win!") {
           setIsWin(newGuess);
           return;
         }
@@ -127,7 +129,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   return (
     <>
       {isLoadingHint && <PageLoader />}
-      <div className="h-screen pt-40 w-full flex flex-col items-center">
+      <div className="h-full pt-40 w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch]">
           <div className="flex justify-center mb-4">
             <JoinCode />

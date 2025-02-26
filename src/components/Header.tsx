@@ -43,10 +43,11 @@ export const Header = () => {
     {
       key: "3",
       label: (
-        <NavLink to={Routes.HOME}
-                 className={({ isActive, isPending }) =>
-                   (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
-                 }
+        <NavLink
+          to={Routes.HOME}
+          className={({ isActive, isPending }) =>
+            (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
+          }
         >
           Главная
         </NavLink>
@@ -55,10 +56,11 @@ export const Header = () => {
     {
       key: "4",
       label: (
-        <NavLink to={Routes.SCOREBOARD}
-                 className={({ isActive, isPending }) =>
-                   (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
-                 }
+        <NavLink
+          to={Routes.SCOREBOARD}
+          className={({ isActive, isPending }) =>
+            (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
+          }
         >
           Scoreboard
         </NavLink>
