@@ -1,22 +1,12 @@
-import { Button, Card, Form, Input, Modal } from "antd";
+import { Button, Card, Form, FormProps, Input, Modal } from "antd";
 import { useRegisterUser } from "../api/api.ts";
 import { useState } from "react";
 import { PageLoader } from "./PageLoader.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Routes } from "../utils/routesConfig.ts";
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-  },
-};
+import { LoginFields } from "../types";
 
 export const FormRegistration = () => {
-  const [form] = Form.useForm();
   const navigate = useNavigate();
   const { mutateAsync: userRegister, isPending } = useRegisterUser();
   const [status, setStatus] = useState<null | {
@@ -28,7 +18,7 @@ export const FormRegistration = () => {
     setStatus(null);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
     userRegister(values).then(response => {
       if (response.status === "409") {
         setStatus({
@@ -44,13 +34,11 @@ export const FormRegistration = () => {
     <>
       {isPending && <PageLoader />}
       <Modal title={status?.title} open={!!status} onOk={handleOk} cancelButtonProps={{ hidden: true }}></Modal>
-      <Card className="p-4 w-full max-w-[70ch]">
+      <Card className="p-4 dark:bg-second-gray">
         <Form
-          {...formItemLayout}
-          form={form}
           name="register"
           onFinish={onFinish}
-          className="w-full max-w-[70ch] flex flex-col gap-4"
+          className="flex flex-col gap-2"
         >
           <Form.Item
             name="email"
@@ -107,7 +95,7 @@ export const FormRegistration = () => {
           >
             <Input.Password />
           </Form.Item>
-          <div className="flex gap-4 w-full">
+          <div className="flex gap-4 w-full mt-2">
             <Link to={Routes.LOGIN} className="w-full">
               <Button className="w-full">
                 Login
@@ -115,7 +103,7 @@ export const FormRegistration = () => {
             </Link>
             <Form.Item className="w-full">
               <Button type="primary" htmlType="submit" className="w-full">
-                Register
+                Registration
               </Button>
             </Form.Item>
           </div>

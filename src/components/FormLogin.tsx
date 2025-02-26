@@ -36,7 +36,7 @@ export const FormLogin = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-3"
         >
           <Form.Item<LoginFields>
             label="Email"
