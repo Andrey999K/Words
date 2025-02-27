@@ -30,6 +30,8 @@ export const keys = {
   gameStop: "gameStop",
 };
 
+console.log("Url бэка: ", window.location.href.startsWith("http://front.dev.local:5100/") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL);
+
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
   baseURL: window.location.href.startsWith("http://front.dev.local:5100/") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
