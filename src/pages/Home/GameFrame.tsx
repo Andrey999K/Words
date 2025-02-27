@@ -130,7 +130,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     <>
       {isLoadingHint && <PageLoader />}
       <div className="h-full pt-40 w-full flex flex-col items-center">
-        <div className="w-full max-w-[60ch]">
+        <div className="w-full max-w-[60ch] h-full flex flex-col">
           <div className="flex justify-center mb-4">
             <JoinCode />
           </div>
@@ -144,7 +144,9 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
               <CardWord data={currentWord} />
             </div>
           )}
-          <div className="flex flex-col mt-5 w-full gap-2 max-h-[calc(100vh*0.7)] overflow-auto">
+          <div
+            id="scoll-elem"
+            className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
                 <CardWord key={word.guess} data={word} />
