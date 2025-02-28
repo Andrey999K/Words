@@ -16,7 +16,12 @@ export const FormLogin = () => {
   const navigate = useNavigate();
 
   const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
-    loginUser(values).then(response => {
+    const lowerValues = {
+      email: values.email?.toLowerCase(),
+      password: values.password?.toLowerCase(),
+      remember: values.remember?.toLowerCase(),
+    };
+    loginUser(lowerValues).then(response => {
       if (response.status === "200") {
         setLoading(true);
         queryClient.invalidateQueries({ queryKey: [keys.user] }).then(() => navigate(Routes.HOME));
@@ -41,7 +46,7 @@ export const FormLogin = () => {
           <Form.Item<LoginFields>
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[{ required: true, message: "Пожалуйста введите ваш E-mail!" }]}
           >
             <Input />
           </Form.Item>
@@ -49,7 +54,7 @@ export const FormLogin = () => {
           <Form.Item<LoginFields>
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[{ required: true, message: "Пожалуйста введите ваш пароль!" }]}
           >
             <Input.Password />
           </Form.Item>

@@ -50,7 +50,7 @@ export const FormRegistration = () => {
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Пожалуйста введите ваш E-mail!",
               },
             ]}
           >
@@ -63,7 +63,7 @@ export const FormRegistration = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: "Пожалуйста введите ваш пароль!",
               },
             ]}
             hasFeedback
@@ -79,7 +79,7 @@ export const FormRegistration = () => {
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: "Подтвердите пароль!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
