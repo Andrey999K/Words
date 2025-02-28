@@ -25,7 +25,7 @@ export const Header = () => {
     {
       key: "1",
       label: (
-        <div className="text-white w-full flex justify-between gap-3">
+        <div className="dark:text-white w-full flex justify-between gap-3 duration-700">
           <span className="font-semibold">Username</span>
           <span>{user?.username}</span>
         </div>
@@ -34,7 +34,7 @@ export const Header = () => {
     {
       key: "2",
       label: (
-        <div className="text-white w-full flex justify-between gap-3">
+        <div className="dark:text-white w-full flex justify-between gap-3 duration-700">
           <span className="font-semibold">Pp</span>
           <span>{user?.pp}</span>
         </div>

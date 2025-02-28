@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message } from "antd";
+import { Button, message, notification } from "antd";
 import { useGameStop, useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
@@ -25,6 +25,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [hint, setHint] = useState<null | string>(null);
   const { mutateAsync: addNewWord } = useNewWord();
   const { mutateAsync: gameStop, isPending: isLoadingGameStop } = useGameStop();
+
+  const colorWord = (wordResult: string | number) => {
+    const wordResultNumber = Number(wordResult);
+    if (wordResultNumber > 1000) return "text-red-500";
+    if (wordResultNumber > 100) return "text-orange-500";
+    else return "text-green-500";
+  };
 
   const handleOk = () => {
     setIsWin(null);
@@ -65,7 +72,12 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const onEnterWord = (value: string) => {
     const findedWord = words.find(word => word.guess === value);
     if (findedWord) {
-      message.info(`Это слово уже было введено. Его номер ${findedWord.result}`);
+      notification.info({
+        message: <div>Это слово уже было введено. Его номер <b
+          className={colorWord(findedWord.result)}>{findedWord.result}</b></div>,
+        duration: 999999,
+      });
+      // message.info(`<div>Это слово уже было введено. Его номер <b>${findedWord.result}</b></div>`);
       return;
     }
     enterWord(value)
@@ -146,7 +158,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           )}
           <div
             id="scoll-elem"
-            className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--second-gray)] pt-2">
+            className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2 pr-2">
             {
               words.map(word => (
                 <CardWord key={word.guess} data={word} />

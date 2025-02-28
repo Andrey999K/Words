@@ -168,6 +168,15 @@ body.dark-theme {
 
 .dark-theme {
 
+  .ant-notification .ant-notification-notice-wrapper {
+    background: #1f1f1f !important;
+
+
+    & div, & .ant-notification-notice-close {
+      color: white !important;
+    }
+  }
+
   &::-webkit-scrollbar-track {
     background: var(--first-gray); /* цвет зоны отслеживания */
   }

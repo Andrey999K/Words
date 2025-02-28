@@ -22,21 +22,11 @@ export const CardWord: FC<CardWordProps> = ({ data }) => {
   const { data: heartbeat } = useHeartbeat();
   const countGamers = heartbeat?.gamers.length || 0;
 
-  // const currentColors = colors.map(color => `!bg-${color}-500 !border-${color}-600`);
-
   const colorCard = (result: Guess) => {
-    // if ("user" in data) {
-    //   return data.user === "red" ? "!bg-red-500 !border-red-600" : "!bg-blue-500 !border-blue-600";
-    //   // return `!bg-${data.user}-500`;
-    // }
-
-    console.log("result: ", countGamers, data, data.player_num);
-
     if (countGamers > 1 && data && data.player_num !== undefined) {
       if (Number(data.player_num) > colors.length) {
         return "!bg-yellow-900";
       }
-      // const color = `!bg-${colors[data.player_num]}-500 !border-${colors[data.player_num]}-600`;
       return colors[data.player_num];
     }
 
