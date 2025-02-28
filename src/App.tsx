@@ -10,6 +10,8 @@ import { PageLoader } from "./components/PageLoader.tsx";
 import { PageLayout } from "./layouts/PageLayout.tsx";
 import { Login } from "./pages/Login/Page.tsx";
 import { Registration } from "./pages/Registration/Page.tsx";
+import { antdThemeConfig } from "./utils/antdThemeConfig.ts";
+import { getDarkTheme } from "./utils/isDarkTheme.ts";
 
 const router = createBrowserRouter([
   {
@@ -47,20 +49,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-const getDarkTheme = () => {
-  const darkTheme = localStorage.getItem("dark");
-  if (darkTheme === null) {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }
-  return JSON.parse(darkTheme);
-};
-
 export const ThemeContext = createContext<undefined | {
   darkTheme: boolean, setDarkTheme: Dispatch<SetStateAction<boolean>>
 }>(undefined);
 
 export const App = () => {
-  const [darkTheme, setDarkTheme] = useState(getDarkTheme());
+  const [darkTheme, setDarkTheme] = useState<boolean>(getDarkTheme());
   const { isLoading: isLoadingUser } = useGetUser();
 
   useEffect(() => {
@@ -79,11 +73,7 @@ export const App = () => {
         darkTheme, setDarkTheme,
       }}>
         <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "green",
-            },
-          }}
+          theme={antdThemeConfig(darkTheme)}
         >
           {
             isLoadingUser && <PageLoader />
