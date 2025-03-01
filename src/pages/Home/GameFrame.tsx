@@ -92,11 +92,12 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           return;
         }
         const newGuess = {
-          id: String(words.length !== 0 ? words[words.length - 1].id : 1),
+          id: guess.guess,
           guess: guess.guess,
           result: guess.result,
           pp: guess.pp,
         };
+        console.log("newGuess", newGuess);
         if (guess.result === "win!") {
           setIsWin(newGuess);
           return;
@@ -132,7 +133,14 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
 
   useEffect(() => {
     if (heartbeat) {
-      setWords(heartbeat?.mega_history.map(word => ({ ...word, id: word.guess })));
+      const { current_player, players_num, mega_history } = heartbeat;
+      setWords(mega_history.map(word => ({ ...word, id: word.guess })));
+      // console.log("heartbeat", heartbeat);
+      // console.log("heartbeat", heartbeat.current_player);
+      // console.log("heartbeat", heartbeat);
+      const prevPlayerNumber = (current_player + players_num - 1) % players_num;
+      const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
+      setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
     }
   }, [heartbeat]);
 
@@ -157,11 +165,10 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             </div>
           )}
           <div
-            id="scoll-elem"
-            className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2 pr-2">
+            className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
-                <CardWord key={word.guess} data={word} />
+                <CardWord key={word.guess} data={word} fill={true} />
               ))
             }
           </div>

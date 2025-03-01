@@ -4,7 +4,8 @@ import { Guess } from "../types";
 import { useHeartbeat } from "../api/api.ts";
 
 type CardWordProps = {
-  data: Guess
+  data: Guess,
+  fill?: boolean
 }
 
 const colors = [
@@ -18,12 +19,12 @@ const colors = [
   "!bg-black-500 !border-black-600",
 ];
 
-export const CardWord: FC<CardWordProps> = ({ data }) => {
+export const CardWord: FC<CardWordProps> = ({ data, fill }) => {
   const { data: heartbeat } = useHeartbeat();
   const countGamers = heartbeat?.gamers.length || 0;
 
   const colorCard = (result: Guess) => {
-    if (countGamers > 1 && data && data.player_num !== undefined) {
+    if (fill && countGamers > 1 && data && data.player_num !== undefined) {
       if (Number(data.player_num) > colors.length) {
         return "!bg-yellow-900";
       }
