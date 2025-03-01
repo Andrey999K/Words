@@ -5,6 +5,7 @@ import { useGetUser, useHeartbeat, useJoinGame } from "../../api/api.ts";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { Routes } from "../../utils/routesConfig.ts";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { usePageTitle } from "../../hooks/usePageTitle.ts";
 
 export const Home = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
@@ -37,6 +38,8 @@ export const Home = () => {
       });
     }
   }, []);
+
+  usePageTitle("");
 
   if (isLoading) return <PageLoader />;
 

@@ -1,10 +1,11 @@
 import { useGetScoreboard } from "../../api/api.ts";
 import { Card } from "antd";
 import { PageLoader } from "../../components/PageLoader.tsx";
+import { usePageTitle } from "../../hooks/usePageTitle.ts";
 
 export const Scoreboard = () => {
   const { data: scoreboard, isLoading } = useGetScoreboard();
-  console.log("scoreboard", scoreboard);
+  usePageTitle("Топ игроков");
 
   if (isLoading) return <PageLoader />;
 
