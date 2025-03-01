@@ -2,10 +2,11 @@ import { Card } from "antd";
 import { FC } from "react";
 import { Guess } from "../types";
 import { useHeartbeat } from "../api/api.ts";
+import { UserOutlined } from "@ant-design/icons";
 
 type CardWordProps = {
   data: Guess,
-  fill?: boolean
+  multi?: boolean,
 }
 
 const colors = [
@@ -19,16 +20,27 @@ const colors = [
   "!bg-black-500 !border-black-600",
 ];
 
-export const CardWord: FC<CardWordProps> = ({ data, fill }) => {
+const colorsBorder = [
+  "!border-red-600",
+  "!border-blue-600",
+  "!border-stone-600",
+  "!border-green-600",
+  "!border-orange-600",
+  "!border-yellow-600",
+  "!border-fuchsia-600",
+  "!border-black-600",
+];
+
+export const CardWord: FC<CardWordProps> = ({ data, multi = false }) => {
   const { data: heartbeat } = useHeartbeat();
   const countGamers = heartbeat?.gamers.length || 0;
 
-  const colorCard = (result: Guess) => {
-    if (fill && countGamers > 1 && data && data.player_num !== undefined) {
+  const colorCard = (result: Guess, multi: boolean, fill: boolean = false) => {
+    if (multi && countGamers > 1 && data && data.player_num !== undefined) {
       if (Number(data.player_num) > colors.length) {
-        return "!bg-yellow-900";
+        return fill ? "!bg-yellow-900" : "!border-yellow-900";
       }
-      return colors[data.player_num];
+      return fill ? colors[data.player_num] : colorsBorder[data.player_num];
     }
 
     const res = Number(result.result);
@@ -38,9 +50,19 @@ export const CardWord: FC<CardWordProps> = ({ data, fill }) => {
   };
 
   return (
-    <Card className={`${colorCard(data)} border-2 card-word`}>
+    <Card className={`${colorCard(data, false)} border-2 card-word`}>
       <div className="flex justify-between w-full items-center">
-        <span>{data.guess}</span>
+        <div className="flex items-center gap-2">
+          {
+            multi && (
+              <div
+                className={`flex justify-center items-center p-1 rounded-full ${colorCard(data, multi)} bg-green-700 border-4 cursor-pointer text-white`}>
+                <UserOutlined className="w-3 h-3" />
+              </div>
+            )
+          }
+          <span>{data.guess}</span>
+        </div>
         <span>{data.result}</span>
       </div>
     </Card>

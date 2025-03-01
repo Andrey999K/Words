@@ -168,7 +168,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
-                <CardWord key={word.guess} data={word} fill={true} />
+                <CardWord key={word.guess} data={word} multi={true} />
               ))
             }
           </div>
