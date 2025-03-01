@@ -26,7 +26,6 @@ export const JoinCode = () => {
     const textArea = document.createElement("textarea");
     textArea.value = `${window.location.origin}?code=${user?.join_code}`;
     document.body.appendChild(textArea);
-    textArea.focus();
     textArea.select();
     try {
       document.execCommand("copy");

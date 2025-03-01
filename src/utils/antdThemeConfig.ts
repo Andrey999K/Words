@@ -6,6 +6,6 @@ export const antdThemeConfig = (isDarkTheme: boolean) => ({
   algorithm: isDarkTheme ? darkAlgorithm : defaultAlgorithm,
   cssVar: true,
   token: {
-    colorPrimary: "green",
+    colorPrimary: "#267e10",
   },
 });

@@ -146,8 +146,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           <div className="flex justify-center mb-4">
             <JoinCode />
           </div>
-          <div className="mb-4 flex justify-center items-center gap-3">
-            <Button type="primary" onClick={handleOk}>Новая игра</Button>
+          <div className="w-full mb-4 flex justify-center items-center gap-3">
+            <Button type="primary" onClick={handleOk} className="w-full max-w-[14ch]">Новая игра</Button>
             <Hint onGetHint={handleGetHint} />
           </div>
           <MainInput onEnter={onEnterWord} />

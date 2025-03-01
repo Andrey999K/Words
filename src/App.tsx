@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "./pages/Home/Page.tsx";
 import { Routes } from "./utils/routesConfig.ts";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
-import { ConfigProvider } from "antd";
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Scoreboard } from "./pages/Scoreboard/Page.tsx";
 import { useGetUser } from "./api/api.ts";
@@ -10,8 +9,9 @@ import { PageLoader } from "./components/PageLoader.tsx";
 import { PageLayout } from "./layouts/PageLayout.tsx";
 import { Login } from "./pages/Login/Page.tsx";
 import { Registration } from "./pages/Registration/Page.tsx";
-import { antdThemeConfig } from "./utils/antdThemeConfig.ts";
 import { getDarkTheme } from "./utils/isDarkTheme.ts";
+import { ConfigProvider } from "antd";
+import { antdThemeConfig } from "./utils/antdThemeConfig.ts";
 
 const router = createBrowserRouter([
   {
