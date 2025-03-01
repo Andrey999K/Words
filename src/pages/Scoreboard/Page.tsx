@@ -11,7 +11,7 @@ export const Scoreboard = () => {
 
   return (
     <div className="py-40">
-      <h2 className="font-medium text-2xl dark:text-white">Scoreboard</h2>
+      <h2 className="font-medium text-2xl dark:text-white">Топ игроков</h2>
       <div className="flex flex-col gap-4 w-full mt-5">
         {
           scoreboard?.map((user, index) => (

@@ -62,7 +62,7 @@ export const Header = () => {
             (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
           }
         >
-          Scoreboard
+          Топ игроков
         </NavLink>
       ),
     },
