@@ -134,13 +134,12 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   useEffect(() => {
     if (heartbeat) {
       const { current_player, players_num, mega_history } = heartbeat;
-      setWords(mega_history.map(word => ({ ...word, id: word.guess })));
-      // console.log("heartbeat", heartbeat);
-      // console.log("heartbeat", heartbeat.current_player);
-      // console.log("heartbeat", heartbeat);
-      const prevPlayerNumber = (current_player + players_num - 1) % players_num;
-      const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
-      setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+      if (players_num > 0) {
+        setWords(mega_history.map(word => ({ ...word, id: word.guess })));
+        const prevPlayerNumber = (current_player + players_num - 1) % players_num;
+        const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
+        setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+      }
     }
   }, [heartbeat]);
 
@@ -168,7 +167,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
-                <CardWord key={word.guess} data={word} multi={true} />
+                <CardWord key={word.guess} data={word} multi={(heartbeat?.players_num! > 1)} />
               ))
             }
           </div>
