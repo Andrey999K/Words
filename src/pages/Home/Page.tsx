@@ -10,8 +10,8 @@ import { usePageTitle } from "../../hooks/usePageTitle.ts";
 export const Home = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
   const { isLoading } = useGetUser();
-  const { mutateAsync: joinGame } = useJoinGame();
-  const { data: heartbeat } = useHeartbeat();
+  const { mutateAsync: joinGame, isPending: isLoadingJoin } = useJoinGame();
+  const { data: heartbeat, isLoading: isLoadingHeartbeat } = useHeartbeat();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -41,7 +41,7 @@ export const Home = () => {
 
   usePageTitle("");
 
-  if (isLoading) return <PageLoader />;
+  if (isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1)) return <PageLoader />;
 
   return (
     <div className="w-full h-full flex items-center justify-center">

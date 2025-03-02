@@ -144,7 +144,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     }
   }, [heartbeat]);
 
-  if (isLoadingUser && isLoadingGameStop) return <PageLoader />;
+  if (isLoadingUser || isLoadingGameStop) return <PageLoader />;
 
   return (
     <>
