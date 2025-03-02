@@ -135,11 +135,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   useEffect(() => {
     if (heartbeat) {
       const { current_player, players_num, mega_history } = heartbeat;
-      if (players_num > 0) {
+      if (players_num > 0 && mega_history.length > 0) {
         setWords(mega_history.map(word => ({ ...word, id: word.guess })));
         const prevPlayerNumber = (current_player + players_num - 1) % players_num;
         const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
-        setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+        if (prevPlayer.history.length > 0) {
+          setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+        }
       }
     }
   }, [heartbeat]);
