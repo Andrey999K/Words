@@ -67,7 +67,7 @@ export const StartFrame: FC<StartFrame> = ({ onStart }) => {
       <p className="dark:text-white text-center">Выберите уровень сложности</p>
       <Radio.Group onChange={onChange} value={value} className="flex gap-3 w-full justify-between dark:text-white">
         {difficulties.map(difficulty =>
-          <RadioButton value={difficulty.number} label={difficulty.label} selected={value} />,
+          <RadioButton key={difficulty.number} value={difficulty.number} label={difficulty.label} selected={value} />,
         )}
       </Radio.Group>
       <p

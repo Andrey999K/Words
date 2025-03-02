@@ -9,6 +9,7 @@ import { HintModal } from "../../components/HintModal.tsx";
 import { WinModal } from "./WinModal.tsx";
 import { JoinCode } from "./JoinCode.tsx";
 import { Hint } from "../../components/Hint.tsx";
+import { Medal } from "../../components/Medal.tsx";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -154,7 +155,14 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             <JoinCode />
           </div>
           <div className="w-full mb-4 flex justify-center items-center gap-3">
-            <Button type="primary" onClick={handleOk} className="w-full max-w-[14ch]">Новая игра</Button>
+            <div className="relative">
+              {heartbeat && (
+                <div className="absolute -left-8 h-full">
+                  <Medal type={heartbeat.medal} />
+                </div>
+              )}
+              <Button type="primary" onClick={handleOk} className="w-full max-w-[14ch]">Новая игра</Button>
+            </div>
             <Hint onGetHint={handleGetHint} />
           </div>
           <MainInput onEnter={onEnterWord} />

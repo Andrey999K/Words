@@ -47,7 +47,11 @@ export const Home = () => {
     <div className="w-full h-full flex items-center justify-center">
       {
         startGame
-          ? <GameFrame onMoveMain={onMainMenu} />
+          ? (
+            heartbeat && heartbeat.game_id !== -1
+              ? <GameFrame onMoveMain={onMainMenu} />
+              : <PageLoader />
+          )
           : <StartFrame onStart={onStartGame} />
       }
     </div>

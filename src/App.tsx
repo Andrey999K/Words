@@ -59,7 +59,6 @@ export const App = () => {
 
   useEffect(() => {
     const body = document.body;
-    console.log("darkTheme", darkTheme);
     if (darkTheme) {
       body.classList.add("dark-theme");
     } else {
