@@ -10,6 +10,7 @@ import { WinModal } from "./WinModal.tsx";
 import { JoinCode } from "./JoinCode.tsx";
 import { Hint } from "../../components/Hint.tsx";
 import { Medal } from "../../components/Medal.tsx";
+import { HeartbeatUser } from "../../api/types.ts";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -20,12 +21,13 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
-  const { isLoading: isLoadingUser } = useGetUser();
+  const { data: currentUser, isLoading: isLoadingUser } = useGetUser();
   const { mutateAsync: getHint, isPending: isLoadingHint } = useGetHint();
   const { data: heartbeat } = useHeartbeat();
   const [hint, setHint] = useState<null | string>(null);
   const { mutateAsync: addNewWord } = useNewWord();
   const { mutateAsync: gameStop, isPending: isLoadingGameStop } = useGameStop();
+  const [currentPlayers, setCurrentPlayers] = useState<HeartbeatUser[] | null>(null);
 
   const colorWord = (wordResult: string | number) => {
     const wordResultNumber = Number(wordResult);
@@ -132,13 +134,23 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
 
   useEffect(() => {
     if (heartbeat) {
-      const { current_player, players_num, mega_history } = heartbeat;
-      if (players_num > 0 && mega_history.length > 0) {
-        setWords(mega_history.map(word => ({ ...word, id: word.guess })));
-        const prevPlayerNumber = (current_player + players_num - 1) % players_num;
-        const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
-        if (prevPlayer.history.length > 0) {
-          setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+      const { current_player, players_num, mega_history, gamers } = heartbeat;
+      if (players_num > 0) {
+        if (mega_history.length > 0) {
+          setWords(mega_history.map(word => ({ ...word, id: word.guess })));
+          const prevPlayerNumber = (current_player + players_num - 1) % players_num;
+          const prevPlayer = heartbeat.gamers.find(gamer => gamer.player_num === prevPlayerNumber)!;
+          if (prevPlayer.history.length > 0) {
+            setCurrentWord(prevPlayer.history[prevPlayer.history.length - 1]);
+          }
+        } else {
+          if (currentPlayers && gamers.length > 1 && currentPlayers.length !== players_num) {
+            const lastUser = gamers[gamers.length - 1].email;
+            if (currentUser?.email !== lastUser) {
+              notification.info({ message: `Игрок ${lastUser} вступил в игру!` });
+            }
+          }
+          setCurrentPlayers(gamers);
         }
       }
     }
