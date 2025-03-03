@@ -15,8 +15,7 @@ export const Header = () => {
   const theme = useContext(ThemeContext);
 
   const handleExit = () => {
-    logoutUser().then(result => {
-      console.log(result);
+    logoutUser().then(() => {
       navigate(Routes.LOGIN);
     });
   };

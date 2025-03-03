@@ -12,6 +12,7 @@ import { Registration } from "./pages/Registration/Page.tsx";
 import { getDarkTheme } from "./utils/isDarkTheme.ts";
 import { ConfigProvider } from "antd";
 import { antdThemeConfig } from "./utils/antdThemeConfig.ts";
+import { PublicRoute } from "./components/PublicRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -38,13 +39,17 @@ const router = createBrowserRouter([
   {
     path: Routes.LOGIN,
     element: (
-      <Login />
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
     ),
   },
   {
     path: Routes.REGISTRATION,
     element: (
-      <Registration />
+      <PublicRoute>
+        <Registration />
+      </PublicRoute>
     ),
   },
 ]);

@@ -116,6 +116,12 @@ export const useLogoutUser = () => {
   return useMutation({
     mutationKey: [keys.logoutUser],
     mutationFn: logoutUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    },
   });
 };
 

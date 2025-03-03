@@ -41,7 +41,8 @@ export const Home = () => {
 
   usePageTitle("");
 
-  if (isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1)) return <PageLoader />;
+  if (isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
+    return <PageLoader />;
 
   return (
     <div className="w-full h-full flex items-center justify-center">

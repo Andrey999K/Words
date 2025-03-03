@@ -14,11 +14,4 @@ export const PublicRoute: FC<RouteProps> = ({ children }) => {
   }
 
   return <Navigate to={Routes.HOME} />;
-  // if (
-  //   userAuth &&
-  //   "comment" in userAuth &&
-  //   userAuth.comment === "Non authorized"
-  // ) {
-  //   return <Navigate to={Routes.LOGIN} />;
-  // }
 };
