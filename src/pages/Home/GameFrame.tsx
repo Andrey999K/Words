@@ -16,7 +16,7 @@ type GameFrameProps = {
 }
 
 export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
-  const { mutateAsync: enterWord } = useSendGuess();
+  const { mutateAsync: enterWord, isPending: isLoadingGuess } = useSendGuess();
   const [words, setWords] = useState<Guess[]>([]);
   const [isWin, setIsWin] = useState<null | Guess>(null);
   const [currentWord, setCurrentWord] = useState<null | Guess>(null);
@@ -76,9 +76,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       notification.info({
         message: <div>Это слово уже было введено. Его номер <b
           className={colorWord(findedWord.result)}>{findedWord.result}</b></div>,
-        duration: 999999,
       });
-      // message.info(`<div>Это слово уже было введено. Его номер <b>${findedWord.result}</b></div>`);
       return;
     }
     enterWord(value)
@@ -167,7 +165,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             </div>
             <Hint onGetHint={handleGetHint} />
           </div>
-          <MainInput onEnter={onEnterWord} />
+          <MainInput onEnter={onEnterWord} isLoading={isLoadingGuess} />
           {currentWord && (
             <div className="mt-2">
               <CardWord data={currentWord} />
