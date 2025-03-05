@@ -26,7 +26,7 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (heartbeat && heartbeat.game_id !== -1) {
+    if (heartbeat && "game_id" in heartbeat && heartbeat.game_id !== -1) {
       setStartGame(true);
     }
   }, [heartbeat]);
@@ -41,7 +41,7 @@ export const Home = () => {
 
   usePageTitle("");
 
-  if (isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
+  if ((heartbeat && !("game_id" in heartbeat)) || isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
     return <PageLoader />;
 
   return (
@@ -49,7 +49,7 @@ export const Home = () => {
       {
         startGame
           ? (
-            heartbeat && heartbeat.game_id !== -1
+            heartbeat && "game_id" in heartbeat && heartbeat.game_id !== -1
               ? <GameFrame onMoveMain={onMainMenu} />
               : <PageLoader />
           )

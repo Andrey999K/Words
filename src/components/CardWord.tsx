@@ -1,13 +1,7 @@
 import { Card } from "antd";
 import { FC } from "react";
 import { Guess } from "../types";
-import { useHeartbeat } from "../api/api.ts";
 import { UserOutlined } from "@ant-design/icons";
-
-type CardWordProps = {
-  data: Guess,
-  multi?: boolean,
-}
 
 const colors = [
   "!bg-red-500 !border-red-600",
@@ -31,9 +25,13 @@ const colorsBorder = [
   "!border-black-600",
 ];
 
-export const CardWord: FC<CardWordProps> = ({ data, multi = false }) => {
-  const { data: heartbeat } = useHeartbeat();
-  const countGamers = heartbeat?.gamers.length || 0;
+type CardWordProps = {
+  data: Guess,
+  countGamers?: number,
+  multi?: boolean,
+}
+
+export const CardWord: FC<CardWordProps> = ({ data, countGamers = 0, multi = false }) => {
 
   const colorCard = (result: Guess, multi: boolean, fill: boolean = false) => {
     if (multi && countGamers > 1 && data && data.player_num !== undefined) {

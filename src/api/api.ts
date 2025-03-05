@@ -80,11 +80,9 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationKey: [keys.registerUser],
     mutationFn: registerUser,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
     },
   });
 };
@@ -98,11 +96,9 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
     },
   });
 };
@@ -116,10 +112,8 @@ export const useLogoutUser = () => {
   return useMutation({
     mutationKey: [keys.logoutUser],
     mutationFn: logoutUser,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-    },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
       queryClient.invalidateQueries({ queryKey: [keys.user] });
     },
   });
@@ -136,9 +130,6 @@ export const useNewGame = () => {
   return useMutation({
     mutationKey: [keys.newGame],
     mutationFn: newGame,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
     },
@@ -200,11 +191,9 @@ export const useJoinGame = () => {
   return useMutation({
     mutationKey: [keys.join],
     mutationFn: joinGame,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
     },
   });
 };

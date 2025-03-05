@@ -150,13 +150,17 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
               notification.info({ message: `Игрок ${lastUser} вступил в игру!` });
             }
           }
+          setWords([]);
+          setCurrentWord(null);
           setCurrentPlayers(gamers);
         }
       }
     }
   }, [heartbeat]);
 
-  if (isLoadingUser || isLoadingGameStop) return <PageLoader />;
+  console.log("words", words);
+
+  if (isLoadingUser || isLoadingGameStop || !(heartbeat && "game_id" in heartbeat)) return <PageLoader />;
 
   return (
     <>
@@ -187,7 +191,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
             className="flex flex-col mt-5 w-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
-                <CardWord key={word.guess} data={word} multi={(heartbeat?.players_num! > 1)} />
+                <CardWord key={word.guess} data={word} countGamers={heartbeat?.gamers.length || 0}
+                          multi={(heartbeat?.players_num! > 1)} />
               ))
             }
           </div>
