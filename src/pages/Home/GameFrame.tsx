@@ -176,8 +176,6 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     }
   }, [heartbeat]);
 
-  console.log("words", words);
-
   if (isLoadingUser || isLoadingGameStop || !(heartbeat && "game_id" in heartbeat)) return <PageLoader />;
 
   return (

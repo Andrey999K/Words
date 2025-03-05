@@ -1,5 +1,5 @@
 import { Input, Spin } from "antd";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 
 type MainInputProps = {
@@ -9,6 +9,7 @@ type MainInputProps = {
 
 export const MainInput = ({ onEnter, isLoading }: MainInputProps) => {
   const [value, setValue] = useState("");
+  const inputRef = useRef<any>(null);
 
   const handleEnterWord = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -25,6 +26,12 @@ export const MainInput = ({ onEnter, isLoading }: MainInputProps) => {
     setValue(e.target.value);
   };
 
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading]);
+
   return (
     <div className="relative h-[30px]">
       <Input
@@ -35,6 +42,7 @@ export const MainInput = ({ onEnter, isLoading }: MainInputProps) => {
         onChange={handleChange}
         onKeyPress={handleEnterWord}
         disabled={isLoading}
+        ref={inputRef}
       />
       {
         isLoading && (
