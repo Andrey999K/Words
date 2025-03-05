@@ -134,7 +134,25 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
 
   useEffect(() => {
     if (heartbeat) {
-      const { current_player, players_num, mega_history, gamers } = heartbeat;
+      const {
+        current_player,
+        players_num,
+        mega_history,
+        gamers,
+        ended,
+        game_word,
+        pp,
+      } = heartbeat;
+      if (ended) {
+        const newGuess = {
+          id: game_word,
+          guess: game_word,
+          result: "0",
+          pp,
+        };
+        setIsWin(newGuess);
+        return;
+      }
       if (players_num > 0) {
         if (mega_history.length > 0) {
           setWords(mega_history.map(word => ({ ...word, id: word.guess })));

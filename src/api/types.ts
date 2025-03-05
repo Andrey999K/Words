@@ -7,11 +7,14 @@ export type JoinGameResponse = {
 export type HeartbeatResponse = {
   comment: string,
   current_player: number,
+  ended: number,
   game_id: number,
+  game_word: string,
   gamers: HeartbeatUser[],
   medal: "chocolate" | "bronze" | "silver" | "gold" | "diamond" | "chromatic"
   mega_history: MegaHistoryWord[],
   players_num: number,
+  pp: number
 }
 
 export type HeartbeatUser = {

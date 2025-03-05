@@ -132,6 +132,7 @@ export const useNewGame = () => {
     mutationFn: newGame,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
     },
   });
 };
