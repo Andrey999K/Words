@@ -6,13 +6,18 @@ import { PageLoader } from "../../components/PageLoader.tsx";
 import { Routes } from "../../utils/routesConfig.ts";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePageTitle } from "../../hooks/usePageTitle.ts";
+import { notification } from "antd";
 
 export const Home = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
-  const { isLoading } = useGetUser();
+  const { isLoading: isLoadingUser } = useGetUser();
   const { mutateAsync: joinGame, isPending: isLoadingJoin } = useJoinGame();
   const { data: heartbeat, isLoading: isLoadingHeartbeat } = useHeartbeat();
   const navigate = useNavigate();
+
+  // console.log("isLoading", isLoadingUser);
+  // console.log("isLoadingJoin", isLoadingJoin);
+  // console.log("isLoadingHeartbeat", isLoadingHeartbeat);
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
@@ -31,9 +36,15 @@ export const Home = () => {
     }
   }, [heartbeat]);
 
+  console.log("Рернелдится");
+
   useEffect(() => {
     if (code) {
-      joinGame(code).then(() => {
+      joinGame(code).then((response) => {
+        console.log(response);
+        if (response.status === "409") {
+          notification.error({ message: "Игра уже начата!" });
+        }
         navigate(Routes.HOME);
       });
     }
@@ -41,7 +52,7 @@ export const Home = () => {
 
   usePageTitle("");
 
-  if ((heartbeat && !("game_id" in heartbeat)) || isLoading || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
+  if ((heartbeat && !("game_id" in heartbeat)) || isLoadingUser || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
     return <PageLoader />;
 
   return (
