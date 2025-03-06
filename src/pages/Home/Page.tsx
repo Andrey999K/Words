@@ -15,10 +15,6 @@ export const Home = () => {
   const { data: heartbeat, isLoading: isLoadingHeartbeat } = useHeartbeat();
   const navigate = useNavigate();
 
-  // console.log("isLoading", isLoadingUser);
-  // console.log("isLoadingJoin", isLoadingJoin);
-  // console.log("isLoadingHeartbeat", isLoadingHeartbeat);
-
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
 
@@ -36,14 +32,13 @@ export const Home = () => {
     }
   }, [heartbeat]);
 
-  console.log("Рернелдится");
-
   useEffect(() => {
     if (code) {
       joinGame(code).then((response) => {
-        console.log(response);
         if (response.status === "409") {
           notification.error({ message: "Игра уже начата!" });
+        } else if (response.status === "410") {
+          notification.error({ message: "Игра уже закончилась!" });
         }
         navigate(Routes.HOME);
       });
