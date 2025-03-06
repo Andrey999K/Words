@@ -33,7 +33,7 @@ export const MainInput = ({ onEnter, isLoading }: MainInputProps) => {
   }, [isLoading]);
 
   return (
-    <div className="relative h-[30px]">
+    <div className="relative h-full max-h-[30px]">
       <Input
         value={value}
         className="w-full absolute"

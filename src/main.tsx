@@ -11,6 +11,6 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <App />
       {window.location.origin === "http://front.dev.local:5100" && <ReactQueryDevtools initialIsOpen={false} />}
-    </QueryClientProvider>,
+    </QueryClientProvider>
   </StrictMode>,
 );
