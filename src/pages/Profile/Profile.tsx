@@ -86,9 +86,9 @@ export const Profile = () => {
                     <span className="w-full max-w-[2.5%]"></span>
                     <span className="w-full max-w-[15%]">Слово</span>
                     <span className="w-full max-w-[10%]">Попытки</span>
-                    <span className="w-full max-w-[15%]">Частота</span>
+                    <span className="w-full max-w-[15%]">IPM</span>
                     <span className="w-full max-w-[15%]">Подсказки</span>
-                    <span className="block ml-auto">Pp</span>
+                    <span className="block ml-auto">PP</span>
                   </div>
                   {
                     scores?.map((score, index) => (
