@@ -5,6 +5,7 @@ import { Avatar, Typography } from "antd";
 import { MedalTypes } from "../../types";
 import { Medal } from "../../components/Medal.tsx";
 import { UserOutlined } from "@ant-design/icons";
+import { roundNumber } from "../../utils/roundNumber.ts";
 
 const { Title } = Typography;
 
@@ -80,31 +81,33 @@ export const Profile = () => {
           {userData && (
             <div className="flex flex-col gap-8">
               {!!scores?.length && (
-                <div className="flex flex-col gap-2 w-full max-h-[30dvh] overflow-auto dark:text-white pr-2">
-                  <div className="flex px-3">
+                <div className="flex flex-col gap-2 w-full dark:text-white">
+                  <div className="flex pl-3 pr-6">
                     <span className="w-full max-w-[7%]"></span>
                     <span className="w-full max-w-[2.5%]"></span>
                     <span className="w-full max-w-[15%]">Слово</span>
-                    <span className="w-full max-w-[10%]">Попытки</span>
-                    <span className="w-full max-w-[15%]">IPM</span>
-                    <span className="w-full max-w-[15%]">Подсказки</span>
-                    <span className="block ml-auto">PP</span>
+                    <span className="w-full max-w-[10%] text-center">Попытки</span>
+                    <span className="w-full max-w-[25%] text-center">IPM</span>
+                    <span className="w-full max-w-[17%] text-center">Подсказки</span>
+                    <span className="block w-full text-center">PP</span>
                   </div>
-                  {
-                    scores?.map((score, index) => (
-                      <div className="flex p-3 rounded-xl bg-first-gray" key={score.id}>
-                        <span className="w-full max-w-[7%]">{index + 1}</span>
-                        <span className="w-full max-w-[2.5%]">{renderMedalWord(score.medal)}</span>
-                        <span className="w-full max-w-[15%]">{score.word}</span>
-                        <span className="w-full max-w-[10%]">{score.attempts}</span>
-                        <span className="w-full max-w-[15%]">{score.ipm}</span>
-                        <span className="w-full max-w-[15%]">{score.hints}</span>
-                        <span className="block ml-auto">
-                          {score.pp}
-                        </span>
-                      </div>
-                    ))
-                  }
+                  <div className="flex flex-col gap-2 max-h-[31dvh] overflow-auto pr-2">
+                    {
+                      scores?.map((score, index) => (
+                        <div className="flex p-3 rounded-xl bg-first-gray" key={score.id}>
+                          <span className="w-full max-w-[7%]">{index + 1}</span>
+                          <span className="w-full max-w-[2.5%]">{renderMedalWord(score.medal)}</span>
+                          <span className="w-full max-w-[15%]">{score.word}</span>
+                          <span className="w-full max-w-[10%] text-center">{score.attempts}</span>
+                          <span className="w-full max-w-[25%] text-center">{score.ipm}</span>
+                          <span className="w-full max-w-[17%] text-center">{score.hints}</span>
+                          <span className="block w-full text-center">
+                            {roundNumber(score.pp)}
+                          </span>
+                        </div>
+                      ))
+                    }
+                  </div>
                 </div>
               )}
               <div className="flex flex-wrap gap-3 w-full max-h-[30dvh] overflow-auto">
