@@ -187,6 +187,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   useEffect(() => {
     if (isWin) {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({ queryKey: [keys.scores] });
     }
   }, [isWin]);
 

@@ -40,3 +40,13 @@ export type NewWordResponse = {
   comment: string,
   newWord: string
 }
+
+export type Score = {
+  attempts: number,
+  hints: number,
+  id: number,
+  ipm: number,
+  pp: number,
+  user_id: number,
+  word: string,
+}

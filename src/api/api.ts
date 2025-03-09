@@ -2,7 +2,7 @@ import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/re
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
 import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
-import { HeartbeatResponse, JoinGameResponse, NewWordResponse } from "./types.ts";
+import { HeartbeatResponse, JoinGameResponse, NewWordResponse, Score } from "./types.ts";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +28,7 @@ export const keys = {
   heartbeat: "getHeartbeat",
   newWord: "newWord",
   gameStop: "gameStop",
+  scores: "scores",
 };
 
 axios.defaults.withCredentials = true;
@@ -178,6 +179,7 @@ export const useGetScoreboard = (): UseQueryResult<ScoreboardType[], Error> => {
   return useQuery({
     queryKey: [keys.scoreboard],
     queryFn: getScoreboard,
+    refetchOnMount: "always",
   });
 };
 
@@ -236,5 +238,18 @@ export const useGameStop = () => {
   return useMutation({
     mutationKey: [keys.gameStop],
     mutationFn: gameStop,
+  });
+};
+
+// получение таблицы очков пользователей
+export const getScores = async (): Promise<unknown> => {
+  const response = await customFetch("/game/scores");
+  return response.data.scores;
+};
+
+export const useGetScores = (): UseQueryResult<Score[], Error> => {
+  return useQuery({
+    queryKey: [keys.scores],
+    queryFn: getScores,
   });
 };
