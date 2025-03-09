@@ -67,7 +67,7 @@ export const Profile = () => {
 
   return (
     <div className="h-full flex flex-col items-center gap-10">
-      <div className="flex h-auto w-full gap-10">
+      <div className="flex h-auto w-full gap-3 md:gap-10">
         <Avatar size={150} icon={<UserOutlined />} />
         <div className="flex flex-col gap-2 text-white">
           <p>Почта: {userData?.email}</p>
@@ -81,7 +81,7 @@ export const Profile = () => {
           {userData && (
             <div className="flex flex-col gap-8">
               {!!scores?.length && (
-                <div className="flex flex-col gap-2 w-full dark:text-white">
+                <div className="flex flex-col gap-2 w-full dark:text-white text-[11px] leading-none md:text-base">
                   <div className="flex pl-3 pr-6">
                     <span className="w-full max-w-[7%]"></span>
                     <span className="w-full max-w-[2.5%]"></span>
@@ -94,7 +94,7 @@ export const Profile = () => {
                   <div className="flex flex-col gap-2 max-h-[31dvh] overflow-auto pr-2">
                     {
                       scores?.map((score, index) => (
-                        <div className="flex p-3 rounded-xl bg-first-gray" key={score.id}>
+                        <div className="flex p-3 rounded-xl bg-first-gray items-center" key={score.id}>
                           <span className="w-full max-w-[7%]">{index + 1}</span>
                           <span className="w-full max-w-[2.5%]">{renderMedalWord(score.medal)}</span>
                           <span className="w-full max-w-[15%]">{score.word}</span>

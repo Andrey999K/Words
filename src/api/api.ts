@@ -33,7 +33,7 @@ export const keys = {
 
 axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
-  baseURL: window.location.href.startsWith("http://front.dev.local:5100/") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
+  baseURL: window.location.href.startsWith("http://front.dev.local") ? import.meta.env.VITE_API_URL_LOCAL : import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
