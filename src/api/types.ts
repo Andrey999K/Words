@@ -1,3 +1,5 @@
+import { MedalTypes } from "../types";
+
 export type JoinGameResponse = {
   comment: string,
   game_id: number,
@@ -46,6 +48,7 @@ export type Score = {
   hints: number,
   id: number,
   ipm: number,
+  medal: MedalTypes,
   pp: number,
   user_id: number,
   word: string,

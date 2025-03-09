@@ -251,5 +251,6 @@ export const useGetScores = (): UseQueryResult<Score[], Error> => {
   return useQuery({
     queryKey: [keys.scores],
     queryFn: getScores,
+    refetchOnMount: "always",
   });
 };

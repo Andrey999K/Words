@@ -47,7 +47,13 @@ export const Home = () => {
 
   usePageTitle("");
 
-  if ((heartbeat && !("game_id" in heartbeat)) || isLoadingUser || isLoadingJoin || isLoadingHeartbeat || (startGame && heartbeat && heartbeat.game_id === -1))
+  if (
+    (heartbeat && !("game_id" in heartbeat))
+    || isLoadingUser
+    || isLoadingJoin
+    || isLoadingHeartbeat
+    || (startGame && heartbeat && heartbeat.game_id === -1)
+  )
     return <PageLoader />;
 
   return (

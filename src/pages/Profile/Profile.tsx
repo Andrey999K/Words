@@ -44,6 +44,15 @@ export const Profile = () => {
     }
   };
 
+  const renderMedalWord = (type: MedalTypes | "") => {
+    if (type === "") return false;
+    return (
+      <div className="max-w-4 flex items-center pt-[2px]">
+        <Medal type={type} />
+      </div>
+    );
+  };
+
   const medalsCount = userData ? (userData?.medals.chromatic +
     userData?.medals.diamond +
     userData?.medals.gold +
@@ -74,6 +83,7 @@ export const Profile = () => {
                 <div className="flex flex-col gap-2 w-full max-h-[30dvh] overflow-auto dark:text-white pr-2">
                   <div className="flex px-3">
                     <span className="w-full max-w-[7%]"></span>
+                    <span className="w-full max-w-[2.5%]"></span>
                     <span className="w-full max-w-[15%]">Слово</span>
                     <span className="w-full max-w-[10%]">Попытки</span>
                     <span className="w-full max-w-[15%]">Частота</span>
@@ -84,13 +94,14 @@ export const Profile = () => {
                     scores?.map((score, index) => (
                       <div className="flex p-3 rounded-xl bg-first-gray" key={score.id}>
                         <span className="w-full max-w-[7%]">{index + 1}</span>
+                        <span className="w-full max-w-[2.5%]">{renderMedalWord(score.medal)}</span>
                         <span className="w-full max-w-[15%]">{score.word}</span>
                         <span className="w-full max-w-[10%]">{score.attempts}</span>
                         <span className="w-full max-w-[15%]">{score.ipm}</span>
                         <span className="w-full max-w-[15%]">{score.hints}</span>
                         <span className="block ml-auto">
-                      {score.pp}
-                    </span>
+                          {score.pp}
+                        </span>
                       </div>
                     ))
                   }
