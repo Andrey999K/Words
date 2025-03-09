@@ -216,3 +216,8 @@ body.dark-theme {
     margin: 0 auto;
   }
 }
+
+.ant-tooltip {
+  width: 100%;
+  max-width: 400px;
+}

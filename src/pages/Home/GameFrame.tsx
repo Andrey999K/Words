@@ -1,6 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { Button, message, notification } from "antd";
-import { useGameStop, useGetHint, useGetUser, useHeartbeat, useNewWord, useSendGuess } from "../../api/api.ts";
+import {
+  keys,
+  queryClient,
+  useGameStop,
+  useGetHint,
+  useGetUser,
+  useHeartbeat,
+  useNewWord,
+  useSendGuess,
+} from "../../api/api.ts";
 import { Guess } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
@@ -98,7 +107,6 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           result: guess.result,
           pp: guess.pp,
         };
-        console.log("newGuess", newGuess);
         if (guess.result === "win!") {
           setIsWin(newGuess);
           return;
@@ -176,12 +184,18 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
     }
   }, [heartbeat]);
 
+  useEffect(() => {
+    if (isWin) {
+      queryClient.invalidateQueries({ queryKey: [keys.user] });
+    }
+  }, [isWin]);
+
   if (isLoadingUser || isLoadingGameStop || !(heartbeat && "game_id" in heartbeat)) return <PageLoader />;
 
   return (
     <>
       {isLoadingHint && <PageLoader />}
-      <div className="h-full pt-40 w-full flex flex-col items-center">
+      <div className="h-full w-full flex flex-col items-center">
         <div className="w-full max-w-[60ch] h-full flex flex-col">
           <div className="flex justify-center mb-4">
             <JoinCode />

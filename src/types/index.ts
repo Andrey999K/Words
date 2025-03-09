@@ -5,6 +5,17 @@ export type ResponseData = {
   [key: string]: any;
 };
 
+export type MedalTypes = "chocolate" | "bronze" | "silver" | "gold" | "diamond" | "chromatic";
+
+export type MedalsUser = {
+  bronze: number,
+  chocolate: number,
+  chromatic: number,
+  diamond: number,
+  gold: number,
+  silver: number
+};
+
 export type UserData = {
   comment: string,
   email: string,
@@ -14,6 +25,8 @@ export type UserData = {
   }[],
   id: number,
   join_code: string,
+  medals: MedalsUser,
+  player_num: number,
   pp: number,
   username: string
 }

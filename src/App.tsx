@@ -13,6 +13,7 @@ import { getDarkTheme } from "./utils/isDarkTheme.ts";
 import { ConfigProvider } from "antd";
 import { antdThemeConfig } from "./utils/antdThemeConfig.ts";
 import { PublicRoute } from "./components/PublicRoute.tsx";
+import { Profile } from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Scoreboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: Routes.PROFILE,
+        element: (
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         ),
       },

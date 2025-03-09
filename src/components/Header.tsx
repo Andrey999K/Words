@@ -56,6 +56,19 @@ export const Header = () => {
       key: "4",
       label: (
         <NavLink
+          to={Routes.PROFILE}
+          className={({ isActive, isPending }) =>
+            (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
+          }
+        >
+          Профиль
+        </NavLink>
+      ),
+    },
+    {
+      key: "5",
+      label: (
+        <NavLink
           to={Routes.SCOREBOARD}
           className={({ isActive, isPending }) =>
             (isPending ? "pending" : isActive ? "!text-green-700 !dark:text-green-900 !font-medium" : " !dark:text-white")
@@ -66,7 +79,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "5",
+      key: "6",
       label: (
         <div onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 dark:text-white">
           <span>Тёмная тема</span>
@@ -75,7 +88,7 @@ export const Header = () => {
       ),
     },
     {
-      key: "6",
+      key: "7",
       label: <Button type="primary" onClick={handleExit}>Выход</Button>,
     },
   ];

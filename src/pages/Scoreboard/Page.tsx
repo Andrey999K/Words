@@ -10,9 +10,9 @@ export const Scoreboard = () => {
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="py-40 h-full">
+    <div className="h-full">
       <h2 className="font-medium text-2xl dark:text-white">Топ игроков</h2>
-      <div className="flex flex-col gap-4 w-full mt-5 max-h-full overflow-auto pr-2">
+      <div className="flex flex-col gap-4 w-full h-full max-h-[74dvh] mt-5 overflow-auto pr-2">
         {
           scoreboard?.map((user, index) => (
             <Card key={user.email} className="p-4 w-full">
