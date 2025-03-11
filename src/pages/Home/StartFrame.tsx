@@ -77,7 +77,11 @@ export const StartFrame: FC<StartFrame> = ({ onStart }) => {
         )}
       </Radio.Group>
       <p
-        className="text-sm md:text-base dark:text-white h-[100px] md:h-[90px] inline bg-first-gray p-2 rounded-lg">{difficulties[value - 1].description}</p>
+        className="text-sm md:text-base dark:text-white h-[100px] md:h-[90px]
+        inline dark:bg-first-gray p-2 rounded-lg"
+      >
+        {difficulties[value - 1].description}
+      </p>
       <Button type="primary" onClick={handleStart}>Старт</Button>
     </div>
   );
