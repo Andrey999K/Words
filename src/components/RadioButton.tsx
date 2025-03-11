@@ -9,7 +9,7 @@ type RadioButtonProps = {
 export const RadioButton = ({ value, label, selected }: RadioButtonProps) => {
   return (
     <Radio.Button
-      className={`select-none rounded md:rounded-none dark:text-white ${selected === value ? "!dark:bg-first-gray" : "dark:bg-second-gray"}`}
+      className={`select-none rounded md:rounded-none dark:text-white ${selected === value ? "dark:bg-first-gray" : "dark:bg-second-gray"}`}
       value={value}
     >{label}</Radio.Button>
   );
