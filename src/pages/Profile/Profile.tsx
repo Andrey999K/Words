@@ -6,6 +6,7 @@ import { MedalTypes } from "../../types";
 import { Medal } from "../../components/Medal.tsx";
 import { UserOutlined } from "@ant-design/icons";
 import { roundNumber } from "../../utils/roundNumber.ts";
+import { useEffect } from "react";
 
 const { Title } = Typography;
 
@@ -13,15 +14,18 @@ export const Profile = () => {
   const { data: userData, isLoading: isLoadingUser } = useGetUser();
   const { data: scores, isLoading: isLoadingScores } = useGetScores();
   usePageTitle("Профиль");
-
-  const renderRowMedals = (type: MedalTypes, number: number) => {
-    if (number < 1) return false;
+  
+  const renderRowMedals = (type: MedalTypes, number: number): any[] => {
+    if (number < 1) return [];
 
     const medals = [];
 
-    for (let i = 0; i < number; i++) {
+    for (let i = 0; i < 150; i++) {
       medals.push(
-        <div key={`component-${i}`} className="w-full max-w-8">
+        <div
+          key={`type-${i}`}
+          className="w-full max-w-8 -ml-[28px]"
+        >
           <Medal key={`medal-${i}`} type={type} />
         </div>,
       );
@@ -61,6 +65,22 @@ export const Profile = () => {
     userData?.medals.silver +
     userData?.medals.bronze +
     userData?.medals.chocolate) : 0;
+
+  useEffect(() => {
+    if (userData) {
+      setTimeout(() => {
+        const medalsContainer = document.querySelector(".medals-container")!;
+        if (medalsContainer) {
+          const medalsElems = Array.from(medalsContainer.children);
+          medalsElems.forEach(
+            (child, index) => {
+              (child as HTMLElement).style.zIndex = `${medalsElems.length - index}`;
+            },
+          );
+        }
+      }, 200);
+    }
+  }, [userData]);
 
 
   if (isLoadingUser || isLoadingScores) return <PageLoader />;
@@ -110,7 +130,7 @@ export const Profile = () => {
                   </div>
                 </div>
               )}
-              <div className="flex flex-wrap gap-3 w-full max-h-[30dvh] overflow-auto">
+              <div className="flex flex-wrap gap-3 w-full max-h-[30dvh] overflow-auto medals-container pl-8">
                 {renderAllMedals()}
               </div>
             </div>
