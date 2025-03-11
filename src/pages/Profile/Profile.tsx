@@ -14,13 +14,13 @@ export const Profile = () => {
   const { data: userData, isLoading: isLoadingUser } = useGetUser();
   const { data: scores, isLoading: isLoadingScores } = useGetScores();
   usePageTitle("Профиль");
-  
+
   const renderRowMedals = (type: MedalTypes, number: number): any[] => {
     if (number < 1) return [];
 
     const medals = [];
 
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < number; i++) {
       medals.push(
         <div
           key={`type-${i}`}
