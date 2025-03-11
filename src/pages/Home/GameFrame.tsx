@@ -214,15 +214,23 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           <MainInput onEnter={onEnterWord} isLoading={isLoadingGuess} />
           {currentWord && (
             <div className="mt-2">
-              <CardWord data={currentWord} />
+              <CardWord
+                data={currentWord}
+                countGamers={heartbeat?.gamers.length || 0}
+                multi={(heartbeat?.players_num! > 1)}
+              />
             </div>
           )}
           <div
             className="flex flex-col mt-5 w-full h-full gap-2 overflow-auto border-t-[1px] border-[var(--first-gray)] dark:border-[var(--second-gray)] pt-2">
             {
               words.map(word => (
-                <CardWord key={word.guess} data={word} countGamers={heartbeat?.gamers.length || 0}
-                          multi={(heartbeat?.players_num! > 1)} />
+                <CardWord
+                  key={word.guess}
+                  data={word}
+                  countGamers={heartbeat?.gamers.length || 0}
+                  multi={(heartbeat?.players_num! > 1)}
+                />
               ))
             }
           </div>
