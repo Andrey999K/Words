@@ -18,8 +18,7 @@ export const FormLogin = () => {
   const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
     const lowerValues = {
       email: values.email?.toLowerCase(),
-      password: values.password?.toLowerCase(),
-      remember: values.remember?.toLowerCase(),
+      password: values.password,
     };
     loginUser(lowerValues).then(response => {
       if (response.status === "200") {

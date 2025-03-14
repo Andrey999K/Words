@@ -19,7 +19,8 @@ export const FormRegistration = () => {
   };
 
   const onFinish: FormProps<LoginFields>["onFinish"] = (values) => {
-    userRegister(values).then(response => {
+    const newValues = { ...values, login: values.email?.toLowerCase() };
+    userRegister(newValues).then(response => {
       if (response.status === "409") {
         setStatus({
           title: "Пользователь с таким email уже существует",
