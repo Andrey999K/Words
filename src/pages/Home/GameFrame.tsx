@@ -90,7 +90,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       });
       return;
     }
-    enterWord(value)
+    const valueTrim = value.trim();
+    enterWord(valueTrim)
       .then(result => {
         const guess = result.data;
         if (guess.result === "not a word") {
