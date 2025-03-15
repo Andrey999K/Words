@@ -82,7 +82,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   const onEnterWord = (value: string) => {
-    const findedWord = words.find(word => word.guess === value);
+    const valueTrim = value.trim();
+    const findedWord = words.find(word => word.guess === valueTrim);
     if (findedWord) {
       notification.info({
         message: <div>Это слово уже было введено. Его номер <b
@@ -90,7 +91,6 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       });
       return;
     }
-    const valueTrim = value.trim();
     enterWord(valueTrim)
       .then(result => {
         const guess = result.data;
