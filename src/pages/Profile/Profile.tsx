@@ -38,6 +38,7 @@ export const Profile = () => {
     if (userData) {
       return (
         <>
+          {renderRowMedals("unobtanium", userData?.medals.unobtanium)}
           {renderRowMedals("chromatic", userData?.medals.chromatic)}
           {renderRowMedals("diamond", userData?.medals.diamond)}
           {renderRowMedals("gold", userData?.medals.gold)}

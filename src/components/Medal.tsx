@@ -4,6 +4,7 @@ import silverMedal from "../assets/medals/m2_silver.svg";
 import goldMedal from "../assets/medals/m3_gold.svg";
 import diamondMedal from "../assets/medals/m4_diamond.svg";
 import chromaticMedal from "../assets/medals/m5_chromatic.svg";
+import unobtaniumMedal from "../assets/medals/m6_unobtanium.svg";
 import { Tooltip } from "antd";
 import { MedalTypes } from "../types";
 
@@ -111,6 +112,22 @@ const medalsList = {
         </p>
         <i className="text-[10px] text-gray-400 mt-1">
           Загаданное слово было встречено на просторах интернета хотя бы раз.
+        </i>
+        <i className="text-[10px] text-gray-400">
+          Чтобы получить медаль можно использовать не более 3 подсказок.
+        </i>
+      </div>,
+  },
+  unobtanium: {
+    src: unobtaniumMedal,
+    alt: "unobtanium medal",
+    description:
+      <div className="flex flex-col">
+        <p>
+          Описание будет добавлено позже
+        </p>
+        <i className="text-[10px] text-gray-400 mt-1">
+           
         </i>
         <i className="text-[10px] text-gray-400">
           Чтобы получить медаль можно использовать не более 3 подсказок.

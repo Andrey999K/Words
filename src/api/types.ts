@@ -13,7 +13,7 @@ export type HeartbeatResponse = {
   game_id: number,
   game_word: string,
   gamers: HeartbeatUser[],
-  medal: "chocolate" | "bronze" | "silver" | "gold" | "diamond" | "chromatic"
+  medal: MedalTypes | "-"
   mega_history: MegaHistoryWord[],
   players_num: number,
   pp: number

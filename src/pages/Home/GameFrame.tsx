@@ -203,7 +203,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           </div>
           <div className="w-full mb-4 flex justify-center items-center gap-3">
             <div className="relative">
-              {heartbeat && (
+              {(heartbeat && heartbeat.medal !== "-") && (
                 <div className="absolute -left-8 h-full">
                   <Medal type={heartbeat.medal} />
                 </div>

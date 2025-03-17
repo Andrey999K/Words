@@ -5,15 +5,10 @@ export type ResponseData = {
   [key: string]: any;
 };
 
-export type MedalTypes = "chocolate" | "bronze" | "silver" | "gold" | "diamond" | "chromatic";
+export type MedalTypes = "chocolate" | "bronze" | "silver" | "gold" | "diamond" | "chromatic" | "unobtanium";
 
 export type MedalsUser = {
-  bronze: number,
-  chocolate: number,
-  chromatic: number,
-  diamond: number,
-  gold: number,
-  silver: number
+  [key in MedalTypes]: number
 };
 
 export type UserData = {
