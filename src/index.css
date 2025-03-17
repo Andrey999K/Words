@@ -221,3 +221,7 @@ body.dark-theme {
   width: 100%;
   max-width: 400px;
 }
+
+.win-modal .ant-modal-content {
+  max-width: 400px;
+}

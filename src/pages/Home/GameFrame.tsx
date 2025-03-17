@@ -10,7 +10,7 @@ import {
   useNewWord,
   useSendGuess,
 } from "../../api/api.ts";
-import { Guess } from "../../types";
+import { Guess, MedalTypes } from "../../types";
 import { MainInput } from "../../components/MainInput.tsx";
 import { CardWord } from "../../components/CardWord.tsx";
 import { PageLoader } from "../../components/PageLoader.tsx";
@@ -37,6 +37,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: addNewWord } = useNewWord();
   const { mutateAsync: gameStop, isPending: isLoadingGameStop } = useGameStop();
   const [currentPlayers, setCurrentPlayers] = useState<HeartbeatUser[] | null>(null);
+  const [medal, setMedal] = useState<MedalTypes | "">("");
 
   const colorWord = (wordResult: string | number) => {
     const wordResultNumber = Number(wordResult);
@@ -96,7 +97,6 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
         const guess = result.data;
         if (guess.result === "not a word") {
           showMessageWithButton(guess.guess);
-          // message.error("Такого слова нет");
           return;
         } else if (guess.result === "not your turn!") {
           message.error("Сейчас не твой ход.");
@@ -186,6 +186,12 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   }, [heartbeat]);
 
   useEffect(() => {
+    if (heartbeat) {
+      setMedal(heartbeat.medal);
+    }
+  }, [heartbeat]);
+
+  useEffect(() => {
     if (isWin) {
       queryClient.invalidateQueries({ queryKey: [keys.user] });
     }
@@ -203,7 +209,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
           </div>
           <div className="w-full mb-4 flex justify-center items-center gap-3">
             <div className="relative">
-              {(heartbeat && heartbeat.medal !== "-") && (
+              {(heartbeat && heartbeat.medal !== "") && (
                 <div className="absolute -left-8 h-full">
                   <Medal type={heartbeat.medal} />
                 </div>
@@ -239,7 +245,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       </div>
       {
         !!isWin && (
-          <WinModal data={isWin} onOk={handleOk} />
+          <WinModal data={isWin} onOk={handleOk} medal={medal} />
         )
       }
       {
