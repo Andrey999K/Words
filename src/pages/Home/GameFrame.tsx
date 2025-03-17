@@ -67,7 +67,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       content: (
         <div className="flex flex-col gap-1 items-center">
           <p>Такого слова нет.</p>
-          <p>Это ошибка?</p>
+          <p>Добавить слово <b>{word}</b>?</p>
           <Button type="primary" className="!p-1 w-full" onClick={() => {
             message.destroy();
             addNewWord(word).then(() => message.success("Заявка на добавление слова успешно отправлена!"));
