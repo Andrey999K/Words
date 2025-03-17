@@ -25,7 +25,7 @@ export const WinModal: FC<WinModalProps> = ({ data, medal, onOk }) => {
     >
       <div className="flex justify-center gap-4 mt-4">
         {medal && (
-          <div className="max-w-[25%]">
+          <div className="w-full max-w-[25%]">
             <Medal type={medal} />
           </div>
         )}
