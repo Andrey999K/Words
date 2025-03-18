@@ -1,5 +1,5 @@
 import { usePageTitle } from "../../hooks/usePageTitle.ts";
-import { useGetScores, useGetUser } from "../../api/api.ts";
+import { useGetProfile, useGetScores } from "../../api/api.ts";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { Avatar, Typography } from "antd";
 import { MedalTypes } from "../../types";
@@ -10,9 +10,26 @@ import { useEffect } from "react";
 
 const { Title } = Typography;
 
+const getUrlParam = (userId: string) => {
+  const searchParams = new URLSearchParams(userId);
+  const params: Record<string, string> = {};
+
+  for (const [key, value] of searchParams.entries()) {
+    params[key] = value;
+  }
+
+  return params;
+};
+
 export const Profile = () => {
-  const { data: userData, isLoading: isLoadingUser } = useGetUser();
-  const { data: scores, isLoading: isLoadingScores } = useGetScores();
+  const userId = getUrlParam(window.location.search)["userId"] || "";
+  const {
+    data: userData,
+    isFetching: isLoadingUser,
+  } = useGetProfile(userId);
+  const { data: scores, isFetching: isLoadingScores } = useGetScores(
+    userId,
+  );
   usePageTitle("Профиль");
 
   const renderRowMedals = (type: MedalTypes, number: number): any[] => {
@@ -83,8 +100,13 @@ export const Profile = () => {
     }
   }, [userData]);
 
-
-  if (isLoadingUser || isLoadingScores) return <PageLoader />;
+  if (
+    isLoadingUser ||
+    isLoadingScores ||
+    (
+      userId === null && window.location.search.includes("userid")
+    )
+  ) return <PageLoader />;
 
   return (
     <div className="h-full flex flex-col items-center gap-10">

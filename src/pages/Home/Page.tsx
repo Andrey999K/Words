@@ -1,5 +1,5 @@
 import { StartFrame } from "./StartFrame.tsx";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { GameFrame } from "./GameFrame.tsx";
 import { useGetUser, useHeartbeat, useJoinGame } from "../../api/api.ts";
 import { PageLoader } from "../../components/PageLoader.tsx";
@@ -26,7 +26,7 @@ export const Home = () => {
     setStartGame(false);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (heartbeat && "game_id" in heartbeat && heartbeat.game_id !== -1) {
       setStartGame(true);
     }
@@ -55,6 +55,12 @@ export const Home = () => {
     || (startGame && heartbeat && heartbeat.game_id === -1)
   )
     return <PageLoader />;
+
+  console.log((heartbeat && !("game_id" in heartbeat)),
+    isLoadingUser,
+    isLoadingJoin,
+    isLoadingHeartbeat,
+    (startGame && heartbeat && heartbeat.game_id === -1));
 
   return (
     <div className="w-full h-full flex items-center justify-center">

@@ -56,6 +56,7 @@ export type Hint = {
 }
 
 export type ScoreboardType = {
+  id: number,
   email: string,
   pp: number
 }

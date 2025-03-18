@@ -29,6 +29,7 @@ export const keys = {
   newWord: "newWord",
   gameStop: "gameStop",
   scores: "scores",
+  profile: "profile",
 };
 
 axios.defaults.withCredentials = true;
@@ -242,15 +243,28 @@ export const useGameStop = () => {
 };
 
 // получение таблицы очков пользователей
-export const getScores = async (): Promise<unknown> => {
-  const response = await customFetch("/game/scores");
+export const getScores = async (id: string): Promise<unknown> => {
+  const response = await customFetch(id ? `/game/scores?userId=${id}` : "/game/scores");
   return response.data.scores;
 };
 
-export const useGetScores = (): UseQueryResult<Score[], Error> => {
+export const useGetScores = (id: string): UseQueryResult<Score[], Error> => {
   return useQuery({
     queryKey: [keys.scores],
-    queryFn: getScores,
+    queryFn: () => getScores(id),
     refetchOnMount: "always",
+  });
+};
+
+// получение данных профиля пользователя
+export const getProfile = async (id: string): Promise<unknown> => {
+  const response = await customFetch(!!id ? `/profile?userId=${id}` : "/profile");
+  return response.data;
+};
+
+export const useGetProfile = (id: string): UseQueryResult<UserData, Error> => {
+  return useQuery({
+    queryKey: [keys.profile],
+    queryFn: () => getProfile(id),
   });
 };
