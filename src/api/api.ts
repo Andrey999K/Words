@@ -266,5 +266,6 @@ export const useGetProfile = (id: string): UseQueryResult<UserData, Error> => {
   return useQuery({
     queryKey: [keys.profile],
     queryFn: () => getProfile(id),
+    refetchOnMount: "always",
   });
 };

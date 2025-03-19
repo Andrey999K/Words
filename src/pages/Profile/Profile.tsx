@@ -32,6 +32,8 @@ export const Profile = () => {
   );
   usePageTitle("Профиль");
 
+  console.log("userData", userData);
+
   const renderRowMedals = (type: MedalTypes, number: number): any[] => {
     if (number < 1) return [];
 
