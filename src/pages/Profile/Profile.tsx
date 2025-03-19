@@ -1,5 +1,5 @@
 import { usePageTitle } from "../../hooks/usePageTitle.ts";
-import { useGetProfile, useGetScores } from "../../api/api.ts";
+import { keys, queryClient, useGetProfile, useGetScores } from "../../api/api.ts";
 import { PageLoader } from "../../components/PageLoader.tsx";
 import { Avatar, Typography } from "antd";
 import { MedalTypes } from "../../types";
@@ -32,7 +32,9 @@ export const Profile = () => {
   );
   usePageTitle("Профиль");
 
-  console.log("userData", userData);
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: [keys.profile] });
+  }, [userId]);
 
   const renderRowMedals = (type: MedalTypes, number: number): any[] => {
     if (number < 1) return [];
