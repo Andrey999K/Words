@@ -34,6 +34,7 @@ export const Profile = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: [keys.profile] });
+    queryClient.invalidateQueries({ queryKey: [keys.scores] });
   }, [userId]);
 
   const renderRowMedals = (type: MedalTypes, number: number): any[] => {
