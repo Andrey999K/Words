@@ -56,12 +56,6 @@ export const Home = () => {
   )
     return <PageLoader />;
 
-  console.log((heartbeat && !("game_id" in heartbeat)),
-    isLoadingUser,
-    isLoadingJoin,
-    isLoadingHeartbeat,
-    (startGame && heartbeat && heartbeat.game_id === -1));
-
   return (
     <div className="w-full h-full flex items-center justify-center">
       {

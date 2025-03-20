@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Button, message, notification } from "antd";
+import { Button, message, Modal, notification } from "antd";
 import {
   keys,
   queryClient,
@@ -20,6 +20,7 @@ import { JoinCode } from "./JoinCode.tsx";
 import { Hint } from "../../components/Hint.tsx";
 import { Medal } from "../../components/Medal.tsx";
 import { HeartbeatUser } from "../../api/types.ts";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 type GameFrameProps = {
   onMoveMain: () => void
@@ -38,6 +39,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   const { mutateAsync: gameStop, isPending: isLoadingGameStop } = useGameStop();
   const [currentPlayers, setCurrentPlayers] = useState<HeartbeatUser[] | null>(null);
   const [medal, setMedal] = useState<MedalTypes | "">("");
+  const [modal, contextHolder] = Modal.useModal();
 
   const colorWord = (wordResult: string | number) => {
     const wordResultNumber = Number(wordResult);
@@ -47,6 +49,21 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
   };
 
   const handleOk = () => {
+    if (!isWin && heartbeat?.mega_history.length) {
+      console.log("Уверены, что хотите начать новую игру?");
+      modal.confirm({
+        title: `Вы уверены, что хотите начать новую игру?`,
+        icon: <ExclamationCircleOutlined />,
+        onOk: () => {
+          setIsWin(null);
+          gameStop().then(() => {
+            onMoveMain();
+          });
+        },
+        maskClosable: true,
+      });
+      return;
+    }
     setIsWin(null);
     gameStop().then(() => {
       onMoveMain();
@@ -251,6 +268,7 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       {
         !!hint && <HintModal hint={hint} onClose={clearHint} />
       }
+      {contextHolder}
     </>
   );
 };
