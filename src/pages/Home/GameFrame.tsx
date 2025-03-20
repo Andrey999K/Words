@@ -54,6 +54,8 @@ export const GameFrame: FC<GameFrameProps> = ({ onMoveMain }) => {
       modal.confirm({
         title: `Вы уверены, что хотите начать новую игру?`,
         icon: <ExclamationCircleOutlined />,
+        okText: "Да",
+        cancelText: "Нет",
         onOk: () => {
           setIsWin(null);
           gameStop().then(() => {
