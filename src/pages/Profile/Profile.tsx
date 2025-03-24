@@ -142,7 +142,8 @@ export const Profile = () => {
                   <div className="flex flex-col gap-2 max-h-[31dvh] overflow-auto pr-2">
                     {
                       scores?.map((score, index) => (
-                        <div className="flex p-3 rounded-xl bg-first-gray items-center" key={score.id}>
+                        <div className="flex p-3 rounded-xl bg-second-gray/5 dark:bg-first-gray items-center"
+                             key={score.id}>
                           <span className="w-full max-w-[7%]">{index + 1}</span>
                           <span className="w-full max-w-[2.5%]">{renderMedalWord(score.medal)}</span>
                           <span className="w-full max-w-[15%]">{score.word}</span>
