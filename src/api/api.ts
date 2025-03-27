@@ -30,6 +30,7 @@ export const keys = {
   gameStop: "gameStop",
   scores: "scores",
   profile: "profile",
+  finalMessage: "finalMessage",
 };
 
 axios.defaults.withCredentials = true;
@@ -266,6 +267,20 @@ export const useGetProfile = (id: string): UseQueryResult<UserData, Error> => {
   return useQuery({
     queryKey: [keys.profile],
     queryFn: () => getProfile(id),
+    refetchOnMount: "always",
+  });
+};
+
+// получение данных профиля пользователя
+export const getFinalMessage = async (): Promise<unknown> => {
+  const response = await customFetch("/game/final_message");
+  return response.data;
+};
+
+export const useGetFinalMessage = (): UseQueryResult<UserData, Error> => {
+  return useQuery({
+    queryKey: [keys.finalMessage],
+    queryFn: getFinalMessage,
     refetchOnMount: "always",
   });
 };
