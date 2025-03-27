@@ -230,3 +230,7 @@ body.dark-theme {
   display: flex;
   justify-content: center;
 }
+
+.dark-theme .ant-modal-header {
+  background-color: transparent !important;
+}

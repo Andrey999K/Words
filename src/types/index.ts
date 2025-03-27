@@ -60,3 +60,9 @@ export type ScoreboardType = {
   email: string,
   pp: number
 }
+
+export type FinalMessageResponse = {
+  comment: string;
+  image: string;
+  message: string;
+}

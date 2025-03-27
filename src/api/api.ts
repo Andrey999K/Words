@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import axios from "axios";
 import { isDev } from "../utils/isDev.ts";
-import { Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
+import { FinalMessageResponse, Hint, LoginFields, ResponseType, ScoreboardType, UserData } from "../types";
 import { HeartbeatResponse, JoinGameResponse, NewWordResponse, Score } from "./types.ts";
 
 export const queryClient = new QueryClient({
@@ -271,13 +271,13 @@ export const useGetProfile = (id: string): UseQueryResult<UserData, Error> => {
   });
 };
 
-// получение данных профиля пользователя
+// получение данных финального сообщения
 export const getFinalMessage = async (): Promise<unknown> => {
   const response = await customFetch("/game/final_message");
   return response.data;
 };
 
-export const useGetFinalMessage = (): UseQueryResult<UserData, Error> => {
+export const useGetFinalMessage = (): UseQueryResult<FinalMessageResponse, Error> => {
   return useQuery({
     queryKey: [keys.finalMessage],
     queryFn: getFinalMessage,
