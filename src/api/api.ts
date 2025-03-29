@@ -39,13 +39,16 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-const customFetch = async (url: string, method?: "GET" | "POST", body?: object) => {
+const customFetch = async (url: string, method?: "GET" | "POST", body?: object, auth?: boolean) => {
   try {
+    const token = localStorage.getItem("authToken");
+    const headers = auth ? {Authorization: token} : null;
+    const config = headers ? {headers} : {};
     let response;
     if (method === "POST") {
-      response = await axiosInstance.post(url, body);
+      response = await axiosInstance.post(url, body, config);
     } else {
-      response = await axiosInstance.get(url);
+      response = await axiosInstance.get(url, config);
     }
     if (response.status === 200) {
       return response.data.result;
@@ -63,7 +66,7 @@ const customFetch = async (url: string, method?: "GET" | "POST", body?: object) 
 
 // получение данных текущего пользователя
 export const checkAuthUser = async (): Promise<unknown> => {
-  const response = await customFetch("/user");
+  const response = await customFetch("/user", "GET", {}, true);
   return response.data;
 };
 
@@ -84,8 +87,8 @@ export const useRegisterUser = () => {
     mutationKey: [keys.registerUser],
     mutationFn: registerUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
+      queryClient.invalidateQueries({queryKey: [keys.user]});
+      queryClient.invalidateQueries({queryKey: [keys.heartbeat]});
     },
   });
 };
@@ -100,15 +103,15 @@ export const useLoginUser = () => {
     mutationKey: [keys.loginUser],
     mutationFn: loginUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
+      queryClient.invalidateQueries({queryKey: [keys.user]});
+      queryClient.invalidateQueries({queryKey: [keys.heartbeat]});
     },
   });
 };
 
 // выход
 const logoutUser = async (): Promise<ResponseType> => {
-  return customFetch("/user/logout", "POST");
+  return customFetch("/user/logout", "POST", {}, true);
 };
 
 export const useLogoutUser = () => {
@@ -116,8 +119,8 @@ export const useLogoutUser = () => {
     mutationKey: [keys.logoutUser],
     mutationFn: logoutUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
+      queryClient.invalidateQueries({queryKey: [keys.heartbeat]});
+      queryClient.invalidateQueries({queryKey: [keys.user]});
     },
   });
 };
@@ -126,7 +129,7 @@ export const useLogoutUser = () => {
 const newGame = async (body: {
   difficulty: string,
 }): Promise<ResponseType> => {
-  return customFetch("/game/new", "POST", body);
+  return customFetch("/game/new", "POST", body, true);
 };
 
 export const useNewGame = () => {
@@ -134,8 +137,8 @@ export const useNewGame = () => {
     mutationKey: [keys.newGame],
     mutationFn: newGame,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
+      queryClient.invalidateQueries({queryKey: [keys.user]});
+      queryClient.invalidateQueries({queryKey: [keys.heartbeat]});
     },
   });
 };
@@ -147,9 +150,13 @@ const sendGuess = async (word: string): Promise<ResponseType<{
   pp: number
   result: string
 }>> => {
-  return customFetch("/game/guess", "POST", {
-    guess: word,
-  });
+  return customFetch(
+    "/game/guess",
+    "POST",
+    {
+      guess: word,
+    },
+    true);
 };
 
 export const useSendGuess = () => {
@@ -161,7 +168,7 @@ export const useSendGuess = () => {
 
 // получение подсказки
 const getHint = async (): Promise<ResponseType<Hint>> => {
-  return customFetch("/game/hint");
+  return customFetch("/game/hint", "GET", {}, true);
 };
 
 export const useGetHint = () => {
@@ -173,7 +180,7 @@ export const useGetHint = () => {
 
 // получение таблицы очков пользователей
 export const getScoreboard = async (): Promise<unknown> => {
-  const response = await customFetch("/game/scoreboard");
+  const response = await customFetch("/game/scoreboard", "GET", {}, true);
   return response.data.scoreboard;
 };
 
@@ -187,9 +194,14 @@ export const useGetScoreboard = (): UseQueryResult<ScoreboardType[], Error> => {
 
 // присоединение к игре
 const joinGame = async (joinCode: string): Promise<ResponseType<JoinGameResponse>> => {
-  return customFetch("/game/join", "POST", {
-    joinCode,
-  });
+  return customFetch(
+    "/game/join",
+    "POST",
+    {
+      joinCode,
+    },
+    true
+  );
 };
 
 export const useJoinGame = () => {
@@ -197,15 +209,15 @@ export const useJoinGame = () => {
     mutationKey: [keys.join],
     mutationFn: joinGame,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [keys.user] });
-      queryClient.invalidateQueries({ queryKey: [keys.heartbeat] });
+      queryClient.invalidateQueries({queryKey: [keys.user]});
+      queryClient.invalidateQueries({queryKey: [keys.heartbeat]});
     },
   });
 };
 
 // получение состояния игры
 export const getHeartbeat = async (): Promise<ResponseType<HeartbeatResponse>> => {
-  const response = await customFetch("/game/heartbeat");
+  const response = await customFetch("/game/heartbeat", "GET", {}, true);
   return response.data;
 };
 
@@ -219,9 +231,14 @@ export const useHeartbeat = (): UseQueryResult<HeartbeatResponse, Error> => {
 
 // добавление нового слова
 const addNewWord = async (newWord: string): Promise<ResponseType<NewWordResponse>> => {
-  return customFetch("/game/missing", "POST", {
-    newWord,
-  });
+  return customFetch(
+    "/game/missing",
+    "POST",
+    {
+      newWord,
+    },
+    true
+  );
 };
 
 export const useNewWord = () => {
@@ -233,7 +250,7 @@ export const useNewWord = () => {
 
 // остановка игры
 const gameStop = async (): Promise<ResponseType<any>> => {
-  return customFetch("/game/stop", "POST");
+  return customFetch("/game/stop", "POST", {}, true);
 };
 
 export const useGameStop = () => {
@@ -245,7 +262,7 @@ export const useGameStop = () => {
 
 // получение таблицы очков пользователей
 export const getScores = async (id: string): Promise<unknown> => {
-  const response = await customFetch(id ? `/game/scores?userId=${id}` : "/game/scores");
+  const response = await customFetch(id ? `/game/scores?userId=${id}` : "/game/scores", "GET", {}, true);
   return response.data.scores;
 };
 
@@ -259,7 +276,7 @@ export const useGetScores = (id: string): UseQueryResult<Score[], Error> => {
 
 // получение данных профиля пользователя
 export const getProfile = async (id: string): Promise<unknown> => {
-  const response = await customFetch(!!id ? `/profile?userId=${id}` : "/profile");
+  const response = await customFetch(!!id ? `/profile?userId=${id}` : "/profile", "GET", {}, true);
   return response.data;
 };
 
@@ -273,7 +290,7 @@ export const useGetProfile = (id: string): UseQueryResult<UserData, Error> => {
 
 // получение данных финального сообщения
 export const getFinalMessage = async (): Promise<unknown> => {
-  const response = await customFetch("/game/final_message");
+  const response = await customFetch("/game/final_message", "GET", {}, true);
   return response.data;
 };
 
