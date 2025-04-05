@@ -80,15 +80,7 @@ export const Profile = () => {
       </div>
     );
   };
-
-  const medalsCount = userData ? (userData?.medals.chromatic +
-    userData?.medals.diamond +
-    userData?.medals.gold +
-    userData?.medals.chocolate +
-    userData?.medals.silver +
-    userData?.medals.bronze +
-    userData?.medals.chocolate) : 0;
-
+  
   useEffect(() => {
     if (userData) {
       setTimeout(() => {
